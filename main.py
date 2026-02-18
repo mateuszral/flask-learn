@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 from markupsafe import escape
 
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world() -> str:
-    return '<h1>Hello, World!</h1>'
+def home() -> str:
+    return render_template('index.html')
 
 @app.get('/users')
 def get_users() -> str:

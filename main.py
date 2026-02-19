@@ -2,7 +2,9 @@ import uuid
 
 from flask import Flask, flash, redirect, render_template, request, session
 from markupsafe import escape
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
+
+from utils.utils import authenticate_user
 
 
 app = Flask(__name__)
@@ -63,18 +65,18 @@ def login():
     # todo later
     # is_remember = request.form.get('remember')
     
-    for user in USERS:
-        if email == user['email'] and check_password_hash(user['password'], password): 
-            user_id = user['id']
-            username = user['username']
-            user_email = user['email']
+    authenticated_user = authenticate_user(email, password, USERS)
+    if authenticated_user: 
+        user_id = authenticated_user['id']
+        username = authenticated_user['username']
+        user_email = authenticated_user['email']
 
-            session['user_id'] = user_id
-            session['username'] = username
-            session['email'] = user_email
+        session['user_id'] = user_id
+        session['username'] = username
+        session['email'] = user_email
 
-            flash('Login successful!', 'success')
-            return redirect('/')
+        flash('Login successful!', 'success')
+        return redirect('/')
     
     flash('Invalid credentials', 'error')
     return render_template('auth.html')

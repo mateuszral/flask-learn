@@ -18,14 +18,16 @@ const showForm = (type) => {
 }
 
 const togglePassword = () => {
-    const input = document.querySelector('.password-field');
-    const toggle = document.querySelector('.toggle-password');
+    const input = document.querySelectorAll('.password-field');
+    const toggle = document.querySelectorAll('.toggle-password');
 
-    if (input.type === 'password') {
-        input.type = 'text';
-        toggle.textContent = 'Hide';
-    } else {
-        input.type = 'password';
-        toggle.textContent = 'Show';
-    }
+    input.forEach((inp, index) => {
+        if (inp.type === 'password') {
+            inp.type = 'text';
+            toggle[index].textContent = 'Hide';
+        } else {
+            inp.type = 'password';
+            toggle[index].textContent = 'Show';
+        }
+    });
 }

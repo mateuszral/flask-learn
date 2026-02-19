@@ -1,6 +1,7 @@
 import uuid
 
-from flask import Flask, flash, redirect, render_template, request, session
+from datetime import timedelta
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from markupsafe import escape
 from werkzeug.security import generate_password_hash
 
@@ -9,6 +10,7 @@ from utils.utils import authenticate_user
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
 USERS = [
     {
@@ -62,21 +64,21 @@ def login_form():
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
-    # todo later
-    # is_remember = request.form.get('remember')
+    remember = request.form.get('remember')
     
     authenticated_user = authenticate_user(email, password, USERS)
     if authenticated_user: 
-        user_id = authenticated_user['id']
-        username = authenticated_user['username']
-        user_email = authenticated_user['email']
+        session['user_id'] = authenticated_user['id']
+        session['username'] = authenticated_user['username']
+        session['email'] = authenticated_user['email']
 
-        session['user_id'] = user_id
-        session['username'] = username
-        session['email'] = user_email
+        if remember:
+            session.permanent = True
+        else:
+            session.permanent = False
 
         flash('Login successful!', 'success')
-        return redirect('/')
+        return redirect(url_for('home'))
     
     flash('Invalid credentials', 'error')
     return render_template('auth.html')

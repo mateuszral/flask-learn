@@ -36,14 +36,17 @@ def home():
 @app.get('/users')
 def get_users():
     return render_template('users.html')
-
-@app.get('/users/<string:username>')
-def get_user(username):
-    return f'<h1>User: {escape(username)}</h1>'
-
+    
 @app.post('/users')
 def create_user(user):
     return f'<h1>User Created {user["name"]}</h1>'
+
+@app.get('/users/<int:user_id>')
+def get_user(user_id):
+    for user in USERS:
+        if user['id'] == str(user_id):
+            return f'<h1>User: {escape(user["username"])}</h1>'
+    return f'<h1>User with ID {user_id} not found</h1>'
 
 @app.get('/contact')
 def contact():
@@ -81,7 +84,7 @@ def forgot_password():
     return render_template('forgot_password.html')
 
 @app.post('/forgot-password')
-def forgot_password():
+def forgot_password_form():
     email = request.form.get('email')
     
     for user in USERS:

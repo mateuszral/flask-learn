@@ -25,17 +25,13 @@ def contact() -> str:
 
 @app.get('/login')
 def login_form() -> str:
-    return render_template('login.html')
+    return render_template('auth.html')
 
 @app.post('/login')
 def login(user:dict) -> str:
     # redirect to home
     # show popup - user logged in
     return f'<h1>User logged in {user["name"]}</h1>'
-
-@app.get('/register')
-def register_form() -> str:
-    return render_template('register.html')
 
 @app.post('/register')
 def register(user:dict) -> str:
@@ -48,3 +44,6 @@ def logout() -> str:
     # redirect to home
     # show popup - user logged out
     return f'<h1>User logout out</h1>'
+
+if __name__ == '__main__':
+    app.run(debug=True)

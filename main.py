@@ -76,6 +76,22 @@ def login():
     flash('Invalid credentials', 'error')
     return render_template('auth.html')
 
+@app.get('/forgot-password')
+def forgot_password():
+    return render_template('forgot_password.html')
+
+@app.post('/forgot-password')
+def forgot_password():
+    email = request.form.get('email')
+    
+    for user in USERS:
+        if email == user['email']:
+            flash('Password reset link sent to your email (not really, this is a demo)', 'info')
+            return render_template('auth.html')
+    
+    flash('Email not found', 'error')
+    return render_template('auth.html')
+
 @app.post('/register')
 def register():
     username = request.form.get('username')
@@ -108,6 +124,10 @@ def logout():
     session.clear()
     flash('You have been logged out.', 'info')
     return redirect('/')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

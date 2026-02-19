@@ -100,6 +100,11 @@ body {
     color: #ef4444;
 }
 
+.flash.info {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+}
+
 .footer {
     background: #020617;
     text-align: center;

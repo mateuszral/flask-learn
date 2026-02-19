@@ -1,6 +1,6 @@
 import uuid
 
-from flask import Flask, flash, redirect, render_template, request
+from flask import Flask, flash, redirect, render_template, request, session
 from markupsafe import escape
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -62,6 +62,14 @@ def login():
     
     for user in USERS:
         if email == user['email'] and check_password_hash(user['password'], password): 
+            user_id = user['id']
+            username = user['username']
+            user_email = user['email']
+
+            session['user_id'] = user_id
+            session['username'] = username
+            session['email'] = user_email
+
             flash('Login successful!', 'success')
             return redirect('/')
     
@@ -75,7 +83,6 @@ def register():
     password = request.form.get('password')
     confirm_password = request.form.get('confirm_password')
     
-    #check if user exists
     for user in USERS:
         if username == user['username'] or email == user['email']:
             flash('User with username/email already exists', 'error')
@@ -93,14 +100,16 @@ def register():
     }
     
     USERS.append(new_user)
-    flash('Account created successfully!', 'success')
+    flash('Account created successfully! You can now log in.', 'success')
     return render_template('auth.html')
 
-@app.post('/logout')
+@app.get('/logout')
 def logout():
     # redirect to home
     # show popup - user logged out
-    return f'<h1>User logout out</h1>'
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .navbar h2 {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .navbar ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #38bdf8;
+        }
+
+        .menu-toggle {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: 0.3s ease;
+        }
+
+        .main {
+            min-height: calc(100vh - 129px);
+        }
+
+        .footer {
+            background: #020617;
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                align-items: center;
+                padding: 1rem 6%;
+                position: relative;
+            }
+
+            .navbar ul {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease;
+                gap: 0;
+            }
+
+            .navbar li {
+                text-align: center;
+            }
+
+            .navbar li a {
+                display: block;
+                padding: 12px 0;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .menu-toggle:checked~ul {
+                max-height: 300px;
+            }
+
+            .menu-toggle:checked+.hamburger span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .menu-toggle:checked+.hamburger span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle:checked+.hamburger span:nth-child(3) {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h2>
+            <a href="/">MyBrand</a>
+        </h2>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/contact">Contact</a></li>
+            {% if session.get('user_id') %}
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/login">Login / Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <main class="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        © 2026 MyBrand. All rights reserved.
+    </footer>
+</body>
+
+</html>

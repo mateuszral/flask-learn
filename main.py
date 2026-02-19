@@ -9,7 +9,7 @@ def home() -> str:
 
 @app.get('/users')
 def get_users() -> str:
-    return '<h1>Users List</h1>'
+    return render_template('users.html')
 
 @app.get('/users/<string:username>')
 def get_user(username:str) -> str:

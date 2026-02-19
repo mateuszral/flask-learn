@@ -1,11 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-    <h1>Register</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .register {
+            padding: 100px 6%;
+            background: #0f172a;
+            text-align: center;
+        }
+
+        .register h2 {
+            font-size: 2.2rem;
+            margin-bottom: 60px;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="register">
+        <h2>Create Your Account</h2>
+        <p>Join us today and start enjoying our amazing features.</p>
+    </section>
+{% endblock %}

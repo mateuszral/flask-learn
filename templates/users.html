@@ -1,11 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
-</head>
-<body>
-    <h1>Users</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Users{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .users {
+            padding: 100px 6%;
+            background: #0f172a;
+            text-align: center;
+        }
+
+        .users h2 {
+            font-size: 2.2rem;
+            margin-bottom: 60px;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="users">
+        <h2>Our Users</h2>
+        <p>Meet our amazing users who are part of our community.</p>
+    </section>
+{% endblock %}

@@ -14,7 +14,7 @@
                 <button class="register-tab" onclick="showForm('register')">Register</button>
             </div>
 
-            <form method="POST" action="#" class="auth-form active login-form">
+            <form method="POST" action="{{ url_for('login') }}" class="auth-form active login-form">
                 <input type="email" name="email" placeholder="Email address" required>
                 <div class="password-wrapper">
                     <input type="password" name="password" class="password-field" placeholder="Password" required>
@@ -32,7 +32,7 @@
                 <button type="submit">Sign In</button>
             </form>
 
-            <form method="POST" action="#" class="auth-form register-form">
+            <form method="POST" action="{{ url_for('register') }}" class="auth-form register-form">
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="email" name="email" placeholder="Email address" required>
                 <div class="password-wrapper">

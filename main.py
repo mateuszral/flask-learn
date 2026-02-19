@@ -1,8 +1,33 @@
+import uuid
+
 from flask import Flask, flash, redirect, render_template, request
 from markupsafe import escape
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+USERS = [
+    {
+        "id": str(uuid.uuid4()),
+        "username": "admin",
+        "email": "admin@admin.com",
+        "password": generate_password_hash("admin")
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "username": "johndoe",
+        "email": "john@example.com",
+        "password": generate_password_hash("password123")
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "username": "janedoe",
+        "email": "jane@example.com",
+        "password": generate_password_hash("securepass")
+    }
+]
 
 @app.route('/')
 def home():
@@ -35,18 +60,41 @@ def login():
     # todo later
     # is_remember = request.form.get('remember')
     
-    if email == 'admin@mybrand.com' and password == 'admin':
-        flash('Login successful!', 'success')
-        return redirect('/')
+    for user in USERS:
+        if email == user['email'] and check_password_hash(user['password'], password): 
+            flash('Login successful!', 'success')
+            return redirect('/')
     
     flash('Invalid credentials', 'error')
     return render_template('auth.html')
 
 @app.post('/register')
-def register(user):
-    # redirect to home
-    # show popup - user created
-    return f'<h1>User registered In {user["name"]}</h1>'
+def register():
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+    
+    #check if user exists
+    for user in USERS:
+        if username == user['username'] or email == user['email']:
+            flash('User with username/email already exists', 'error')
+            return render_template('auth.html')
+        
+    if password != confirm_password:
+        flash('Passwords are not the same', 'error')
+        return render_template('auth.html')
+        
+    new_user = {
+        'id': str(uuid.uuid4()),
+        'username': username,
+        'email': email,
+        'password': generate_password_hash(password),
+    }
+    
+    USERS.append(new_user)
+    flash('Account created successfully!', 'success')
+    return render_template('auth.html')
 
 @app.post('/logout')
 def logout():

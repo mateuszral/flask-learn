@@ -105,8 +105,6 @@ def register():
 
 @app.get('/logout')
 def logout():
-    # redirect to home
-    # show popup - user logged out
     session.clear()
     flash('You have been logged out.', 'info')
     return redirect('/')

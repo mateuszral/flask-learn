@@ -144,6 +144,11 @@ body {
         border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    .navbar h4 {
+        text-align: center;
+        padding: 12px 0;
+    }
+
     .hamburger {
         display: flex;
     }

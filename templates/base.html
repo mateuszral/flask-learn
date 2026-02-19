@@ -22,6 +22,9 @@
             <span></span>
         </label>
         <ul>
+            {% if session.get('user_id') %}
+                <h4>Hello {{ session.get('username') }}</h4>
+            {% endif %}
             <li><a href="/">Home</a></li>
             <li><a href="/users">Users</a></li>
             <li><a href="/contact">Contact</a></li>

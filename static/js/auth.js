@@ -17,17 +17,14 @@ const showForm = (type) => {
     }
 }
 
-const togglePassword = () => {
-    const input = document.querySelectorAll('.password-field');
-    const toggle = document.querySelectorAll('.toggle-password');
+const togglePassword = (id, el) => {
+    const input = document.querySelector(`#${id}`);
 
-    input.forEach((inp, index) => {
-        if (inp.type === 'password') {
-            inp.type = 'text';
-            toggle[index].textContent = 'Hide';
-        } else {
-            inp.type = 'password';
-            toggle[index].textContent = 'Show';
-        }
-    });
+    if (input.type === 'password') {
+        input.type = 'text';
+        el.textContent = 'Hide';
+    } else {
+        input.type = 'password';
+        el.textContent = 'Show';
+    }
 }

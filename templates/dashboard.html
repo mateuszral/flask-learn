@@ -29,7 +29,7 @@
             <div class="card">
                 <h3>Security</h3>
                 <p>Update password and security preferences.</p>
-                <a href="#">Security Settings →</a>
+                <a href="{{ url_for('security') }}">Security Settings →</a>
             </div>
 
             {% if user.role == "admin" %}

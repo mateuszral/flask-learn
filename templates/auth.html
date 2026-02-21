@@ -17,8 +17,8 @@
             <form method="POST" action="{{ url_for('login') }}" class="auth-form active login-form">
                 <input type="email" name="email" placeholder="Email address" required>
                 <div class="password-wrapper">
-                    <input type="password" name="password" class="password-field" placeholder="Password" required>
-                    <span class="toggle-password" onclick="togglePassword()">
+                    <input type="password" name="password" class="password-field" id="password" placeholder="Password" required>
+                    <span class="toggle-password" onclick="togglePassword('password', this)">
                         Show
                     </span>
                 </div>
@@ -36,8 +36,8 @@
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="email" name="email" placeholder="Email address" required>
                 <div class="password-wrapper">
-                    <input type="password" name="password" class="password-field" placeholder="Password" required>
-                    <span class="toggle-password" onclick="togglePassword()">
+                    <input type="password" name="password" class="password-field" id="registerPassword" placeholder="Password" required>
+                    <span class="toggle-password" onclick="togglePassword('registerPassword', this)">
                         Show
                     </span>
                 </div>

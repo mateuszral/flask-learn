@@ -35,20 +35,69 @@ def profile():
 @app.post('/profile')
 def update_profile():
     user = next((u for u in USERS if u['id'] == session['user_id']), None)
-    if not user:
-        flash('User not found', 'error')
+    if user:
+        username = request.form.get('username')
+        email = request.form.get('email')
+        
+        if username:
+            user['username'] = username
+        if email:
+            user['email'] = email
+        
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    flash('User not found', 'error')
+    return redirect(url_for('home'))
+
+@app.post('/delete-account')
+def delete_account():
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    if user:
+        USERS.remove(user)
+        session.clear()
+        flash('Your account has been deleted.', 'info')
         return redirect(url_for('home'))
     
-    username = request.form.get('username')
-    email = request.form.get('email')
+    flash('User not found', 'error')
+    return redirect(url_for('home'))
+
+@app.get('/security')
+def security():
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    if user:
+        return render_template('security.html', user=user)
     
-    if username:
-        user['username'] = username
-    if email:
-        user['email'] = email
+    flash('User not found', 'error')
+    return redirect(url_for('home'))
+
+@app.post('/change-password')
+def change_password():
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    if user:
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if not authenticate_user(user['email'], current_password, USERS):
+            flash('Current password is incorrect', 'error')
+            return redirect(url_for('security'))
+        
+        
+        if new_password != confirm_password:
+            flash('New passwords do not match', 'error')
+            return redirect(url_for('security'))
+        
+        if current_password == new_password:
+            flash('New password cannot be the same as the current password', 'error')
+            return redirect(url_for('security'))
+        
+        user['password'] = generate_password_hash(new_password)
+        flash('Password changed successfully!', 'success')
+        return redirect(url_for('security'))
     
-    flash('Profile updated successfully!', 'success')
-    return redirect(url_for('profile'))
+    flash('User not found', 'error')
+    return redirect(url_for('home'))
 
 @app.get('/contact')
 def contact():

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Security Settings{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/security.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="security-wrapper">
+        <div class="security-card">
+
+            <div class="section">
+                <h3>Change Password</h3>
+                <p>Make sure your new password is strong and secure.</p>
+
+                <form method="POST" action="{{ url_for('change_password') }}" class="security-form">
+
+                    <div class="password-wrapper">
+                        <input type="password" name="current_password" id="currentPassword" placeholder="Current Password" required>
+                        <span onclick="togglePassword('currentPassword', this)">Show</span>
+                    </div>
+
+                    <div class="password-wrapper">
+                        <input type="password" name="new_password" id="newPassword" placeholder="New Password" required>
+                        <span onclick="togglePassword('newPassword', this)">Show</span>
+                    </div>
+
+                    <div class="password-wrapper">
+                        <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm New Password" required>
+                        <span onclick="togglePassword('confirmPassword', this)">Show</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Update Password</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h3>Active Session</h3>
+                <p>Your current login session details.</p>
+
+                <div class="session-box">
+                    Username: <strong>{{ user.username }}</strong><br>
+                    Logged in as: <strong>{{ user.email }}</strong><br>
+                    Role: <strong>{{ user.role }}</strong>
+                </div>
+            </div>
+
+            <div class="section danger-zone">
+                <h3 style="color:#ef4444;">Danger Zone</h3>
+                <p>Permanently delete your account and all associated data.</p>
+
+                <form method="POST" action="{{ url_for('delete_account') }}">
+                    <button type="submit" class="btn-danger">Delete Account</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

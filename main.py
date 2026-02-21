@@ -17,19 +17,22 @@ USERS = [
         "id": str(uuid.uuid4()),
         "username": "admin",
         "email": "admin@admin.com",
-        "password": generate_password_hash("admin")
+        "password": generate_password_hash("admin"),
+        "role": "admin"
     },
     {
         "id": str(uuid.uuid4()),
         "username": "johndoe",
         "email": "john@example.com",
-        "password": generate_password_hash("password123")
+        "password": generate_password_hash("password123"),
+        "role": "user"
     },
     {
         "id": str(uuid.uuid4()),
         "username": "janedoe",
         "email": "jane@example.com",
-        "password": generate_password_hash("securepass")
+        "password": generate_password_hash("securepass"),
+        "role": "user"
     }
 ]
 
@@ -69,8 +72,6 @@ def login():
     authenticated_user = authenticate_user(email, password, USERS)
     if authenticated_user: 
         session['user_id'] = authenticated_user['id']
-        session['username'] = authenticated_user['username']
-        session['email'] = authenticated_user['email']
 
         if remember:
             session.permanent = True
@@ -131,6 +132,15 @@ def logout():
     session.clear()
     flash('You have been logged out.', 'info')
     return redirect('/')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        flash('You must be logged in to access the dashboard.', 'error')
+        return redirect(url_for('login_form'))
+    
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    return render_template('dashboard.html', user=user)
 
 @app.errorhandler(404)
 def page_not_found(e):

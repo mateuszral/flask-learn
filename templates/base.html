@@ -22,9 +22,6 @@
             <span></span>
         </label>
         <ul>
-            {% if session.get('user_id') %}
-                <h4>Hello {{ session.get('username') }}</h4>
-            {% endif %}
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('get_users') }}">Users</a></li>
             <li><a href="{{ url_for('contact') }}">Contact</a></li>

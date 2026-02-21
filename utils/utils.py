@@ -1,26 +1,24 @@
-import uuid
-
 from flask import flash, redirect, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
 USERS = [
     {
-        "id": str(uuid.uuid4()),
+        "id": "70676dfe-7b41-4972-8206-b470d365a82b",
         "username": "admin",
         "email": "admin@admin.com",
         "password": generate_password_hash("admin"),
         "role": "admin"
     },
     {
-        "id": str(uuid.uuid4()),
+        "id": "fd14e866-209f-4422-ba1c-e499910e9d76",
         "username": "johndoe",
         "email": "john@example.com",
         "password": generate_password_hash("password123"),
         "role": "user"
     },
     {
-        "id": str(uuid.uuid4()),
+        "id": "6c6590d6-a16f-444d-9e9b-b8de29e6174f",
         "username": "janedoe",
         "email": "jane@example.com",
         "password": generate_password_hash("securepass"),

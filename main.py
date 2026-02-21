@@ -2,7 +2,6 @@ import uuid
 
 from datetime import timedelta
 from flask import Flask, flash, redirect, render_template, request, session, url_for
-from markupsafe import escape
 from werkzeug.security import generate_password_hash
 
 from utils.utils import USERS, authenticate_user, admin_required
@@ -24,12 +23,32 @@ def get_users():
 def create_user(user):
     return f'<h1>User Created {user["name"]}</h1>'
 
-@app.get('/users/<int:user_id>')
-def get_user(user_id):
-    for user in USERS:
-        if user['id'] == str(user_id):
-            return f'<h1>User: {escape(user["username"])}</h1>'
-    return f'<h1>User with ID {user_id} not found</h1>'
+@app.get('/profile')
+def profile():
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    if user:
+        return render_template('profile.html', user=user)
+    
+    flash('User not found', 'error')
+    return redirect(url_for('home'))
+
+@app.post('/profile')
+def update_profile():
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    if not user:
+        flash('User not found', 'error')
+        return redirect(url_for('home'))
+    
+    username = request.form.get('username')
+    email = request.form.get('email')
+    
+    if username:
+        user['username'] = username
+    if email:
+        user['email'] = email
+    
+    flash('Profile updated successfully!', 'success')
+    return redirect(url_for('profile'))
 
 @app.get('/contact')
 def contact():

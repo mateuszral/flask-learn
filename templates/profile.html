@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="profile-wrapper">
+        <div class="profile-card">
+
+            <div class="profile-header">
+                <div class="avatar">
+                    {{ user.username[0]|upper }}
+                </div>
+
+                <h2>{{ user.username }}</h2>
+
+                {% if user.role == "admin" %}
+                    <div class="role-badge role-admin">Administrator</div>
+                {% else %}
+                    <div class="role-badge role-user">Standard User</div>
+                {% endif %}
+            </div>
+
+            <form method="POST" class="profile-form">
+
+                <div>
+                    <label>Username</label>
+                    <input type="text" name="username" value="{{ user.username }}" required>
+                </div>
+
+                <div>
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ user.email }}" required>
+                </div>
+
+                <div class="profile-actions">
+                    <button type="submit" class="btn-primary">Update Profile</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back to Dashboard</a>
+                </div>
+
+            </form>
+
+        </div>
+    </section>
+{% endblock %}

@@ -50,6 +50,8 @@ def update_profile():
     flash('User not found', 'error')
     return redirect(url_for('home'))
 
+#not secured endpoint, should be protected with admin_required decorator
+#used in edit user form in admin edit user modal should be 2 different endpoints
 @app.post('/edit-account/<user_id>')
 def edit_account(user_id):
     user = next((u for u in USERS if u['id'] == user_id), None)
@@ -59,17 +61,21 @@ def edit_account(user_id):
     
     username = request.form.get('username')
     email = request.form.get('email')
+    role = request.form.get('role')
 
     if username:
         user['username'] = username
     if email:
-        user['email'] = email
+        user['email'] = email    
+    if role in ['user', 'admin']:
+        user['role'] = role
 
     flash('Account updated successfully!', 'success')
     return redirect(url_for('user_management'))
 
+@app.post('/delete-account')
 @app.post('/delete-account/<user_id>')
-def delete_account(user_id):
+def delete_account(user_id = None):
     if user_id:
         if user_id == session['user_id']:
             flash('You cannot delete your own account from the admin panel. Use the delete account option in your profile settings.', 'error')

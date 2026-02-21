@@ -91,6 +91,10 @@
     padding-top: 30px;
 }
 
+.danger-zone h3 {
+    color: #ef4444;
+}
+
 .btn-danger {
     padding: 10px 18px;
     background: rgba(239, 68, 68, 0.15);
@@ -99,4 +103,70 @@
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.25s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    transform: translateY(20px);
+    transition: 0.25s ease;
+}
+
+.modal-overlay.visible .modal {
+    transform: translateY(0);
+}
+
+.modal h3 {
+    margin-bottom: 15px;
+    color: #ef4444;
+}
+
+.modal p {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    margin-bottom: 25px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.btn-secondary {
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    background: none;
+    color: #cbd5e1;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    border-color: #38bdf8;
+    color: #38bdf8;
 }

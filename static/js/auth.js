@@ -16,15 +16,3 @@ const showForm = (type) => {
         loginTab.classList.remove('active');
     }
 }
-
-const togglePassword = (id, el) => {
-    const input = document.querySelector(`#${id}`);
-
-    if (input.type === 'password') {
-        input.type = 'text';
-        el.textContent = 'Hide';
-    } else {
-        input.type = 'password';
-        el.textContent = 'Show';
-    }
-}

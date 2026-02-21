@@ -37,9 +37,17 @@
     <main class="main">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash {{ category }} visible" onClick="closeFlash()">{{ message }}</div>
-                {% endfor %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}" data-time="5000">
+                            <div class="flash-content">
+                                {{ message }}
+                                <button class="flash-close" onclick="closeFlash(this)">×</button>
+                            </div>
+                            <div class="flash-progress"></div>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
         {% block content %}

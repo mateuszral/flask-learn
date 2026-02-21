@@ -9,7 +9,7 @@
     <section class="security-wrapper">
         <div class="security-card">
 
-            <div class="section">
+            <section class="section">
                 <h3>Change Password</h3>
                 <p>Make sure your new password is strong and secure.</p>
 
@@ -32,9 +32,9 @@
 
                     <button type="submit" class="btn-primary">Update Password</button>
                 </form>
-            </div>
+            </section>
 
-            <div class="section">
+            <section class="section">
                 <h3>Active Session</h3>
                 <p>Your current login session details.</p>
 
@@ -43,19 +43,37 @@
                     Logged in as: <strong>{{ user.email }}</strong><br>
                     Role: <strong>{{ user.role }}</strong>
                 </div>
-            </div>
+            </section>
 
-            <div class="section danger-zone">
-                <h3 style="color:#ef4444;">Danger Zone</h3>
+            <section class="section danger-zone">
+                <h3>Danger Zone</h3>
                 <p>Permanently delete your account and all associated data.</p>
 
-                <form method="POST" action="{{ url_for('delete_account') }}">
-                    <button type="submit" class="btn-danger">Delete Account</button>
-                </form>
+                <button type="button" class="btn-danger" onclick="toggleModal('deleteModal')">
+                    Delete Account
+                </button>
+            </section>
+
+            <div id="deleteModal" class="modal-overlay">
+                <div class="modal">
+                    <h3>Confirm Account Deletion</h3>
+                    <p>
+                        This action cannot be undone. All your data will be permanently removed.
+                    </p>
+
+                    <form method="POST" action="{{ url_for('delete_account') }}">
+                        <div class="modal-actions">
+                            <button type="button" class="btn-secondary" onclick="toggleModal('deleteModal')">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn-danger">
+                                Yes, Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
         </div>
     </section>
-
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

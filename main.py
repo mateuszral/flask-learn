@@ -56,6 +56,10 @@ def contact():
 
 @app.get('/login')
 def login_form():
+    if 'user_id' in session:
+        flash('You are already logged in.', 'info')
+        return redirect(url_for('home'))
+        
     return render_template('auth.html')
 
 @app.post('/login')
@@ -81,7 +85,12 @@ def login():
 
 @app.get('/forgot-password')
 def forgot_password():
-    return render_template('forgot_password.html')
+    if 'user_id' in session:
+        return render_template('forgot_password.html')
+    
+    flash('You must be logged in to access this page.', 'error')
+    return redirect(url_for('login_form'))
+
 
 @app.post('/forgot-password')
 def forgot_password_form():
@@ -93,6 +102,14 @@ def forgot_password_form():
             return render_template('auth.html')
     
     flash('Email not found', 'error')
+    return render_template('auth.html')
+
+@app.get('/register')
+def register_form():
+    if 'user_id' in session:
+        flash('You are already logged in.', 'info')
+        return redirect(url_for('home'))
+        
     return render_template('auth.html')
 
 @app.post('/register')

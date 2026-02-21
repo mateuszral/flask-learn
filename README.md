@@ -1,6 +1,6 @@
 # flask-learn
 
-- protected routes (admin etc.)
+- protected routes (admin etc.) ✅
 - rembemer me feature ✅
-- admin template
+- admin template ✅
 - ts instead of js

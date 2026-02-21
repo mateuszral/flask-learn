@@ -10,8 +10,16 @@ const togglePassword = (id, el) => {
     }
 }
 
-const toggleModal =(modalId) => {
+const toggleModal =(modalId, userId = null, email = null) => {
     const modal = document.querySelector(`#${modalId}`);
+
+    if (userId !== null) {
+        const deleteForm = document.getElementById('deleteForm');
+        const deleteMessage = document.getElementById('deleteMessage');
+        deleteMessage.innerHTML = `Are you sure you want to delete user with email <strong>${email}</strong>? This action cannot be undone.`;
+        deleteForm.action = `/delete-account/${userId}`;
+    }
+
     modal.classList.toggle('visible');
 }
 

@@ -50,8 +50,40 @@ def update_profile():
     flash('User not found', 'error')
     return redirect(url_for('home'))
 
-@app.post('/delete-account')
-def delete_account():
+@app.post('/edit-account/<user_id>')
+def edit_account(user_id):
+    user = next((u for u in USERS if u['id'] == user_id), None)
+    if not user:
+        flash('User not found', 'error')
+        return redirect(url_for('user_management'))
+    
+    username = request.form.get('username')
+    email = request.form.get('email')
+
+    if username:
+        user['username'] = username
+    if email:
+        user['email'] = email
+
+    flash('Account updated successfully!', 'success')
+    return redirect(url_for('user_management'))
+
+@app.post('/delete-account/<user_id>')
+def delete_account(user_id):
+    if user_id:
+        if user_id == session['user_id']:
+            flash('You cannot delete your own account from the admin panel. Use the delete account option in your profile settings.', 'error')
+            return redirect(url_for('user_management'))
+        
+        user = next((u for u in USERS if u['id'] == user_id), None)
+        if user:
+            USERS.remove(user)
+            flash('User deleted successfully!', 'success')
+        else:
+            flash('User not found', 'error')
+        
+        return redirect(url_for('user_management'))
+    
     user = next((u for u in USERS if u['id'] == session['user_id']), None)
     if user:
         USERS.remove(user)

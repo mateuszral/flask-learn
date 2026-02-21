@@ -36,12 +36,29 @@
 					</td>
 					<td>
 						<button class="action-btn btn-edit">Edit</button>
-						<button class="action-btn btn-delete">Delete</button>
+						<button class="action-btn btn-delete" onclick="toggleModal('deleteModal', '{{ user.id }}', '{{ user.email }}')">Delete</button>
 					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 
+		<div id="deleteModal" class="modal-overlay">
+			<div class="modal">
+				<h3>Delete User</h3>
+				<p id="deleteMessage"></p>
+
+				<form method="POST" id="deleteForm">
+					<div class="modal-actions">
+						<button type="button" class="btn-secondary" onclick="toggleModal('deleteModal')">
+							Cancel
+						</button>
+						<button type="submit" class="btn-danger">
+							Confirm Delete
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</section>
 {% endblock %}

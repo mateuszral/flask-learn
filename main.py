@@ -5,36 +5,12 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from markupsafe import escape
 from werkzeug.security import generate_password_hash
 
-from utils.utils import authenticate_user
+from utils.utils import USERS, authenticate_user, admin_required
 
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
-
-USERS = [
-    {
-        "id": str(uuid.uuid4()),
-        "username": "admin",
-        "email": "admin@admin.com",
-        "password": generate_password_hash("admin"),
-        "role": "admin"
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "username": "johndoe",
-        "email": "john@example.com",
-        "password": generate_password_hash("password123"),
-        "role": "user"
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "username": "janedoe",
-        "email": "jane@example.com",
-        "password": generate_password_hash("securepass"),
-        "role": "user"
-    }
-]
 
 @app.route('/')
 def home():

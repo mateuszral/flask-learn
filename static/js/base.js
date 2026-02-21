@@ -23,12 +23,14 @@ const toggleModal =(modalId, userId = null, email = null) => {
     modal.classList.toggle('visible');
 }
 
-const closeAfterClick = document.querySelector('#deleteModal');
+const closeAfterClick = document.querySelectorAll('.modal-overlay');
 if (closeAfterClick) {
-    closeAfterClick.addEventListener('click', (e) => {
-        if (e.target === closeAfterClick) {
-             closeAfterClick.classList.remove('visible');
-        }
+    closeAfterClick.forEach((overlay) => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove('visible');
+            }
+        });
     });
 }
 

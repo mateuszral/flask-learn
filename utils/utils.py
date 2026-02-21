@@ -36,12 +36,12 @@ def authenticate_user(email, password, users):
 
 def admin_required(func):
     def wrapper(*args, **kwargs):
-        if 'user_id' not in session:
+        user = next((u for u in USERS if u['id'] == session['user_id']), None)
+        if not user:
             flash('You must be logged in to access this page.', 'error')
             return redirect(url_for('login_form'))
         
-        user = next((u for u in USERS if u['id'] == session['user_id']), None)
-        if user and user['role'] == 'admin':
+        if user['role'] == 'admin':
             return func(*args, **kwargs)
         
         flash('You do not have permission to access this page.', 'error')

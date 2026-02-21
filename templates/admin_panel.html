@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Admin Panel{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_panel.css') }}">
+{% endblock %}
+{% block content %}
+    <section class="panel-wrapper">
+
+        <div class="panel-header">
+            <h1>Admin Dashboard</h1>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value">{{ users|length }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Admins</h3>
+                <div class="value">
+                    {{ users | selectattr("role", "equalto", "admin") | list | length }}
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Standard Users</h3>
+                <div class="value">
+                    {{ users | selectattr("role", "equalto", "user") | list | length }}
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <a href="{{ url_for('user_management') }}">Manage Users</a>
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </div>
+
+    </section>
+{% endblock %}

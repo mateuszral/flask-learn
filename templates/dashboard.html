@@ -37,13 +37,13 @@
                 <div class="card">
                     <h3>User Management</h3>
                     <p>View, edit and manage platform users.</p>
-                    <a href="#">Manage Users →</a>
+                    <a href="{{ url_for('user_management') }}">Manage Users →</a>
                 </div>
 
                 <div class="card">
                     <h3>Admin Panel</h3>
                     <p>Access advanced administrative tools.</p>
-                    <a href="#">Open Admin Panel →</a>
+                    <a href="{{ url_for('admin_panel') }}">Open Admin Panel →</a>
                 </div>
 
             {% endif %}

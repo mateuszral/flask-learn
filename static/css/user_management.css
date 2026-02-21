@@ -1,0 +1,74 @@
+.admin-wrapper {
+    padding: 50px 6%;
+}
+
+.admin-header {
+    margin-bottom: 30px;
+}
+
+.admin-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.user-table th,
+.user-table td {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.user-table th {
+    background: rgba(255, 255, 255, 0.04);
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.user-table tr:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.role-admin {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.role-user {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.action-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.btn-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}

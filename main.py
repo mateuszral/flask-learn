@@ -203,6 +203,16 @@ def dashboard():
     user = next((u for u in USERS if u['id'] == session['user_id']), None)
     return render_template('dashboard.html', user=user)
 
+@app.route('/user-management')
+@admin_required
+def user_management():
+    return render_template('user_management.html', users=USERS)
+
+@app.route('/admin-panel')
+@admin_required
+def admin_panel():
+    return render_template('admin_panel.html', users=USERS)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404

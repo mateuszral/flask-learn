@@ -11,6 +11,20 @@
     font-weight: 700;
 }
 
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
 .user-table {
     width: 100%;
     border-collapse: collapse;
@@ -175,4 +189,55 @@
 .btn-secondary:hover {
     border-color: #38bdf8;
     color: #38bdf8;
+}
+
+@media (max-width: 900px) {
+    .user-table {
+        border: none;
+        background: none;
+    }
+
+    .user-table thead {
+        display: none;
+    }
+
+    .user-table,
+    .user-table tbody,
+    .user-table tr,
+    .user-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .user-table tr {
+        background: rgba(15, 23, 42, 0.85);
+        margin-bottom: 16px;
+        border-radius: 14px;
+        padding: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .user-table td {
+        padding: 8px 0;
+        text-align: left;
+        position: relative;
+        font-size: 0.85rem;
+    }
+
+    .user-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #94a3b8;
+        display: block;
+        margin-bottom: 2px;
+        font-size: 0.75rem;
+    }
+
+    .user-table td:last-child {
+        margin-top: 10px;
+    }
+
+    .action-btn {
+        margin-right: 8px;
+    }
 }

@@ -54,6 +54,10 @@ def update_profile():
 #used in edit user form in admin edit user modal should be 2 different endpoints
 @app.post('/edit-account/<user_id>')
 def edit_account(user_id):
+    if user_id == session['user_id']:
+        flash('You cannot edit your own account from the admin panel. Use the edit profile option in your profile settings.', 'error')
+        return redirect(url_for('user_management'))
+    
     user = next((u for u in USERS if u['id'] == user_id), None)
     if not user:
         flash('User not found', 'error')

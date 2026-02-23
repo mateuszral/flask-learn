@@ -32,6 +32,7 @@ def profile():
         return render_template('profile.html', user=user)
     
     flash('User not found', 'error')
+    session.clear()
     return redirect(url_for('home'))
 
 @app.post('/profile')
@@ -43,9 +44,10 @@ def update_profile():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         bio = request.form.get('bio')
+        age = request.form.get('age')
         avatar = request.files.get('avatar')
         
-        if user['username'] == username and user['email'] == email and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio and not avatar:
+        if user['username'] == username and user['email'] == email and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio and user['user_info']['age'] == age and not avatar:
             flash('No changes made to the account.', 'info')
             return redirect(url_for('profile'))
 
@@ -66,6 +68,8 @@ def update_profile():
             user['username'] = username
         if email:
             user['email'] = email
+        if age:
+            user['user_info']['age'] = age
             
         if avatar.filename != '':
             filename = secure_filename(avatar.filename)
@@ -77,6 +81,7 @@ def update_profile():
         return redirect(url_for('profile'))
 
     flash('User not found', 'error')
+    session.clear()
     return redirect(url_for('home'))
 
 @app.post('/edit-account/<user_id>')
@@ -97,10 +102,11 @@ def edit_account(user_id):
     first_name = request.form.get('firstName')
     last_name = request.form.get('lastName')
     bio = request.form.get('bio')
+    age = request.form.get('age')
     reset_password = request.form.get('resetPassword')
     reset_avatar = request.form.get('resetAvatar')
     
-    if user['username'] == username and user['email'] == email and user['role'] == role and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio:
+    if user['username'] == username and user['email'] == email and user['role'] == role and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio and user['user_info']['age'] == age and not reset_password and not reset_avatar:
         flash('No changes made to the account.', 'info')
         return redirect(url_for('user_management'))
 
@@ -124,6 +130,8 @@ def edit_account(user_id):
         user['user_info']['last_name'] = last_name
     if bio:
         user['user_info']['bio'] = bio
+    if age:
+        user['user_info']['age'] = age
     if reset_password:
         user['password'] = generate_password_hash('defaultpassword')
         user['change_password'] = True
@@ -158,6 +166,7 @@ def delete_account(user_id = None):
         return redirect(url_for('home'))
     
     flash('User not found', 'error')
+    session.clear()
     return redirect(url_for('home'))
 
 @app.get('/security')
@@ -167,6 +176,7 @@ def security():
         return render_template('security.html', user=user)
     
     flash('User not found', 'error')
+    session.clear()
     return redirect(url_for('home'))
 
 @app.post('/change-password')
@@ -197,6 +207,7 @@ def change_password():
         return redirect(url_for('security'))
     
     flash('User not found', 'error')
+    session.clear()
     return redirect(url_for('home'))
 
 @app.get('/contact')
@@ -288,11 +299,17 @@ def register():
         'password': generate_password_hash(password),
         'role': 'user',
         'change_password': False,
-        'is_featured': False
+        'is_featured': False,
+        'user_info': {
+            "first_name": "",
+            "last_name": "",
+            "age": 0,
+            "bio": ""
+        },
     }
     
     USERS.append(new_user)
-    flash('Account created successfully! You can now log in.', 'success')
+    flash('Account created successfully! You can now log in. Can change user info after login (first name, last name, age, bio)', 'success')
     return render_template('auth.html')
 
 @app.get('/logout')
@@ -301,7 +318,7 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect('/')
 
-@app.route('/dashboard')
+@app.get('/dashboard')
 def dashboard():
     if 'user_id' not in session:
         flash('You must be logged in to access the dashboard.', 'error')
@@ -344,7 +361,13 @@ def admin_add_user():
         'password': generate_password_hash(password),
         'role': role,
         'change_password': True,
-        'is_featured': False
+        'is_featured': False,
+        'user_info': {
+            'first_name': '',
+            'last_name': '',
+            'age': 0,
+            'bio': ''
+        },
     }
 
     USERS.append(new_user)

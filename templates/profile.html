@@ -57,6 +57,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" value="{{ user.user_info.age }}" required>
+                </div>
+
+                <div class="form-group">
                     <label for="bio">Bio</label>
                     <textarea id="bio" name="bio" required>{{ user.user_info.bio }}</textarea>
                 </div>

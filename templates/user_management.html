@@ -39,7 +39,7 @@
 							{% endif %}
 						</td>
 						<td>
-							<button class="action-btn btn-edit" onclick="toggleModal('editModal', '{{ user.id }}', '{{ user.email }}', '{{ user.username }}','{{ user.role }}')">Edit</button>
+							<button class="action-btn btn-edit" onclick="toggleModal('editModal', '{{ user.id }}', '{{ user.email }}', '{{ user.username }}','{{ user.role }}', '{{ user.user_info.first_name }}', '{{ user.user_info.last_name }}', '{{ user.user_info.age }}', '{{ user.user_info.bio }}')">Edit</button>
 							<button class="action-btn btn-delete" onclick="toggleModal('deleteModal', '{{ user.id }}', '{{ user.email }}')">Delete</button>
 						</td>
 					</tr>
@@ -114,6 +114,11 @@
 						<label for="lastName">Last Name</label>
 						<input type="text" name="lastName" id="lastName" required>
 					</div>
+
+					<div class="form-group">
+						<label for="age">Age</label>
+						<input type="number" name="age" id="age" required>
+					</div>
 					
 					<div class="form-group">
 						<label for="bio">Bio</label>
@@ -168,42 +173,4 @@
 			</div>
 		</div>
 	</section>
-
-	<script>
-		document.addEventListener("click", function(e) {
-
-			// Toggle dropdown
-			if (e.target.closest(".role-selected")) {
-				const select = e.target.closest(".role-select");
-				select.querySelector(".role-options").classList.toggle("active");
-				return;
-			}
-
-			// Select role
-			if (e.target.closest(".role-option")) {
-				const option = e.target.closest(".role-option");
-				const select = option.closest(".role-select");
-
-				const role = option.dataset.role;
-				const hiddenInput = select.querySelector("input[name='role']");
-				const selectedDisplay = select.querySelector(".role-selected span");
-
-				hiddenInput.value = role;
-
-				if (role === "admin") {
-					selectedDisplay.outerHTML = '<span class="badge badge-admin">Admin</span>';
-				} else {
-					selectedDisplay.outerHTML = '<span class="badge badge-user">User</span>';
-				}
-
-				select.querySelector(".role-options").classList.remove("active");
-				return;
-			}
-
-			// Close if clicking outside
-			document.querySelectorAll(".role-options").forEach(opt => {
-				opt.classList.remove("active");
-			});
-		});
-	</script>
 {% endblock %}

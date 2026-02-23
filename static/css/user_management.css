@@ -161,7 +161,8 @@
 
 .form-group textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 60px;
+    max-height: 200px;
 }
 
 .form-group:not(.reset-password, .reset-avatar) label {

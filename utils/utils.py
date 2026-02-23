@@ -9,7 +9,15 @@ USERS = [
         "email": "admin@admin.com",
         "password": generate_password_hash("admin"),
         "role": "admin",
-        "change_password": False
+        "change_password": False,
+        "is_featured": True,
+        "user_info": {
+            "first_name": "Admin",
+            "last_name": "User",
+            "age": 35,
+            "bio": "Administrator of the system."
+        },
+        "avatar": None
     },
     {
         "id": "fd14e866-209f-4422-ba1c-e499910e9d76",
@@ -17,7 +25,15 @@ USERS = [
         "email": "john@example.com",
         "password": generate_password_hash("password123"),
         "role": "user",
-        "change_password": False
+        "change_password": False,
+        "is_featured": True,
+        "user_info": {
+            "first_name": "John",
+            "last_name": "Doe",
+            "age": 30,
+            "bio": "Avid traveler and photographer."
+        },
+        "avatar": "https://picsum.photos/id/1004/80/80"
     },
     {
         "id": "6c6590d6-a16f-444d-9e9b-b8de29e6174f",
@@ -25,7 +41,15 @@ USERS = [
         "email": "jane@example.com",
         "password": generate_password_hash("securepass"),
         "role": "user",
-        "change_password": False
+        "change_password": False,
+        "is_featured": False,
+        "user_info": {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "age": 28,
+            "bio": "Software developer and tech enthusiast."
+        },
+        "avatar": "https://picsum.photos/id/1005/80/80"
     }
 ]
 

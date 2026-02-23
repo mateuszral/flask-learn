@@ -15,21 +15,20 @@
         <h2>Our Featured Users</h2>
 
         <div class="user-grid">
-            <div class="user-card">
-                <img src="https://picsum.photos/id/1004/80/80" alt="User 3">
-                <h3>Emily Brown</h3>
-                <p>Digital Marketer helping brands grow online.</p>
-            </div>
-            <div class="user-card">
-                <img src="https://picsum.photos/id/1005/80/80" alt="User 1">
-                <h3>Jane Doe</h3>
-                <p>Frontend Developer passionate about UI/UX design.</p>
-            </div>
-            <div class="user-card">
-                <img src="https://picsum.photos/id/1006/80/80" alt="User 2">
-                <h3>John Smith</h3>
-                <p>Backend Engineer specializing in scalable systems.</p>
-            </div>
+            {% for user in users %}
+                {% if user.is_featured %}
+                    <div class="user-card">
+                        <!-- to change after uploading avatars to server -->
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar }}" />
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default.png') }}" />
+                        {% endif %}
+                        <h3>{{ user.user_info.first_name }} {{ user.user_info.last_name }} ({{ user.user_info.age }})</h3>
+                        <p>{{ user.user_info.bio }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </section>
 

@@ -13,7 +13,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', users=USERS)
 
 @app.get('/users')
 def get_users():
@@ -243,7 +243,8 @@ def register():
         'email': email,
         'password': generate_password_hash(password),
         'role': 'user',
-        'change_password': False
+        'change_password': False,
+        'is_featured': False
     }
     
     USERS.append(new_user)
@@ -298,7 +299,8 @@ def admin_add_user():
         'email': email,
         'password': generate_password_hash(password),
         'role': role,
-        'change_password': True
+        'change_password': True,
+        'is_featured': False
     }
 
     USERS.append(new_user)

@@ -16,7 +16,7 @@
 
         <div class="user-grid">
             {% for user in users %}
-                {% if user.is_featured %}
+                {% if user.featured %}
                     <div class="user-card">
                         <!-- to change after uploading avatars to server -->
                         {% if user.avatar %}

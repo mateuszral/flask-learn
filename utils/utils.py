@@ -10,7 +10,7 @@ USERS = [
         "password": generate_password_hash("admin"),
         "role": "admin",
         "change_password": False,
-        "is_featured": True,
+        "featured": True,
         "user_info": {
             "first_name": "Admin",
             "last_name": "User",
@@ -26,7 +26,7 @@ USERS = [
         "password": generate_password_hash("password123"),
         "role": "user",
         "change_password": False,
-        "is_featured": True,
+        "featured": True,
         "user_info": {
             "first_name": "John",
             "last_name": "Doe",
@@ -42,7 +42,7 @@ USERS = [
         "password": generate_password_hash("securepass"),
         "role": "user",
         "change_password": False,
-        "is_featured": False,
+        "featured": False,
         "user_info": {
             "first_name": "Jane",
             "last_name": "Doe",

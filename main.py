@@ -299,7 +299,7 @@ def register():
         'password': generate_password_hash(password),
         'role': 'user',
         'change_password': False,
-        'is_featured': False,
+        'featured': False,
         'user_info': {
             "first_name": "",
             "last_name": "",
@@ -361,7 +361,7 @@ def admin_add_user():
         'password': generate_password_hash(password),
         'role': role,
         'change_password': True,
-        'is_featured': False,
+        'featured': False,
         'user_info': {
             'first_name': '',
             'last_name': '',

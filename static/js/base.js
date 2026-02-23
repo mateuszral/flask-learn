@@ -10,7 +10,7 @@ const togglePassword = (id, el) => {
     }
 }
 
-const toggleModal =(modalId, userId = null, email = null, username = null, role = null, first_name = null, last_name = null, age = null, bio = null) => {
+const toggleModal =(modalId, userId = null, email = null, username = null, role = null, first_name = null, last_name = null, age = null, bio = null, featured = null) => {
     const modal = document.querySelector(`#${modalId}`);
 
     if (modalId === 'editModal') {
@@ -23,6 +23,7 @@ const toggleModal =(modalId, userId = null, email = null, username = null, role 
         document.getElementById("lastName").value = last_name;
         document.getElementById("age").value = age;
         document.getElementById("bio").value = bio;
+        document.getElementById("featured").checked = featured;
 
         form.action = `/edit-account/${userId}`;
     }

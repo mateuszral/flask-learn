@@ -243,17 +243,47 @@ def dashboard():
         return redirect(url_for('login_form'))
     
     user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    
+    if user['change_password']:
+        flash('You must change your password before accessing the dashboard.', 'error')
+        return redirect(url_for('security'))
+    
     return render_template('dashboard.html', user=user)
 
-@app.route('/user-management')
+@app.get('/user-management')
 @admin_required
 def user_management():
     return render_template('user_management.html', users=USERS)
 
-@app.route('/admin-panel')
+@app.get('/admin-panel')
 @admin_required
 def admin_panel():
     return render_template('admin_panel.html', users=USERS)
+
+@app.post('/admin/add-user')
+@admin_required
+def admin_add_user():
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    role = request.form.get('role')
+
+    if any(u["email"] == email for u in USERS) or any(u["username"] == username for u in USERS):
+        flash('User with username/email already exists', 'error')
+        return redirect(url_for('user_management'))
+
+    new_user = {
+        'id': str(uuid.uuid4()),
+        'username': username,
+        'email': email,
+        'password': generate_password_hash(password),
+        'role': role,
+        'change_password': True
+    }
+
+    USERS.append(new_user)
+    flash('User created successfully! Have to change password on first login', 'success')
+    return redirect(url_for('user_management'))
 
 @app.errorhandler(404)
 def page_not_found(e):

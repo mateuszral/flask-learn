@@ -4,6 +4,11 @@
 
 .admin-header {
     margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .admin-header h1 {

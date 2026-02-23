@@ -8,44 +8,55 @@
 {% block content %}
     <section class="profile-wrapper">
         <div class="profile-card">
+            
+            <form method="POST" class="profile-form" enctype="multipart/form-data">
+                <div class="profile-header">
+                    <div class="avatar-wrapper">
+                        <div class="avatar">
+                            {% if user.avatar %}
+                                <img id="avatarPreview" src="{{ user.avatar }}" alt="User Avatar">
+                            {% else %}
+                                <img id="avatarPreview" src="{{ url_for('static', filename='img/default.png') }}" alt="Default Avatar">
+                            {% endif %}
+                        </div>
 
-            <div class="profile-header">
-                <div class="avatar">
-                    {{ user.username[0]|upper }}
+                        <label for="avatarUpload" class="avatar-upload-btn">
+                            Change Avatar
+                        </label>
+                        <input type="file" id="avatarUpload" name="avatar" accept="image/png, image/jpeg" hidden>
+                    </div>
+
+                    <h2>{{ user.username }}</h2>
+
+                    {% if user.role == "admin" %}
+                        <div class="role-badge role-admin">Administrator</div>
+                    {% else %}
+                        <div class="role-badge role-user">Standard User</div>
+                    {% endif %}
                 </div>
 
-                <h2>{{ user.username }}</h2>
 
-                {% if user.role == "admin" %}
-                    <div class="role-badge role-admin">Administrator</div>
-                {% else %}
-                    <div class="role-badge role-user">Standard User</div>
-                {% endif %}
-            </div>
-
-            <form method="POST" class="profile-form">
-
-                <div>
+                <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" value="{{ user.username }}" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" value="{{ user.email }}" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="first_name">First name</label>
-                    <input type="first_name" id="first_name" name="first_name" value="{{ user.user_info.first_name }}" required>
+                    <input type="text" id="first_name" name="first_name" value="{{ user.user_info.first_name }}" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="last_name">Last name</label>
-                    <input type="last_name" id="last_name" name="last_name" value="{{ user.user_info.last_name }}" required>
+                    <input type="text" id="last_name" name="last_name" value="{{ user.user_info.last_name }}" required>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="bio">Bio</label>
                     <textarea id="bio" name="bio" rows="4" required>{{ user.user_info.bio }}</textarea>
                 </div>
@@ -55,8 +66,10 @@
                     <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back to Dashboard</a>
                 </div>
 
-            </form>
+            </div>
+        </form>
 
-        </div>
     </section>
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}

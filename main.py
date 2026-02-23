@@ -1,8 +1,10 @@
+import os
 import uuid
 
 from datetime import timedelta
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
 
 from utils.utils import USERS, authenticate_user, admin_required
 
@@ -41,18 +43,19 @@ def update_profile():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         bio = request.form.get('bio')
+        avatar = request.files.get('avatar')
         
-        if user['username'] == username and user['email'] == email and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio:
+        if user['username'] == username and user['email'] == email and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio and not avatar:
             flash('No changes made to the account.', 'info')
-            return redirect(url_for('user_management'))
+            return redirect(url_for('profile'))
 
         if any(u["username"] == username for u in USERS if u["id"] != session['user_id']):
             flash('Username already exists', 'error')
-            return redirect(url_for('user_management'))
+            return redirect(url_for('profile'))
 
         if any(u["email"] == email for u in USERS if u["id"] != session['user_id']):
             flash('Email already exists', 'error')
-            return redirect(url_for('user_management'))
+            return redirect(url_for('profile'))
 
         if first_name:
             user['user_info']['first_name'] = first_name
@@ -63,6 +66,12 @@ def update_profile():
             user['username'] = username
         if email:
             user['email'] = email
+            
+        if avatar.filename != '':
+            filename = secure_filename(avatar.filename)
+            upload_path = os.path.join('static/img', filename)
+            avatar.save(upload_path)
+            user['avatar'] = f'static/img/{filename}'
         
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))

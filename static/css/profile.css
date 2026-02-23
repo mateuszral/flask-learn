@@ -60,7 +60,7 @@
 
 .profile-form div:not(:last-child) {
     display: grid;
-    grid-template-columns: 70px 200px;
+    grid-template-columns: 70px 1fr;
     align-items: center;
     gap: 15px;
 }
@@ -70,7 +70,13 @@
     color: #94a3b8;
 }
 
-.profile-form input {
+.profile-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.profile-form input,
+.profile-form textarea {
     padding: 12px;
     background: #0f172a;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -78,7 +84,8 @@
     color: #f1f5f9;
 }
 
-.profile-form input:focus {
+.profile-form input:focus,
+.profile-form textarea:focus {
     outline: none;
     border-color: #38bdf8;
     box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
@@ -113,20 +120,26 @@
     cursor: pointer;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 475px) {
     .profile-card {
         padding: 30px 20px;
     }
 
-    .profile-form input {
+    .profile-form div {
         width: 100%;
     }
+
 
     .profile-form div:not(:last-child) {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+    }
+
+    .profile-form input,
+    .profile-form textarea {
+        width: 100%;
     }
 
     .profile-actions button,

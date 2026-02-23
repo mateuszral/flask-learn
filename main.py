@@ -38,8 +38,28 @@ def update_profile():
     if user:
         username = request.form.get('username')
         email = request.form.get('email')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
+        bio = request.form.get('bio')
         
-        if username:
+        if user['username'] == username and user['email'] == email and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio:
+            flash('No changes made to the account.', 'info')
+            return redirect(url_for('user_management'))
+
+        if any(u["username"] == username for u in USERS if u["id"] != session['user_id']):
+            flash('Username already exists', 'error')
+            return redirect(url_for('user_management'))
+
+        if any(u["email"] == email for u in USERS if u["id"] != session['user_id']):
+            flash('Email already exists', 'error')
+            return redirect(url_for('user_management'))
+
+        if first_name:
+            user['user_info']['first_name'] = first_name
+        if last_name:
+            user['user_info']['last_name'] = last_name
+        if bio:
+            user['user_info']['bio'] = bio
             user['username'] = username
         if email:
             user['email'] = email
@@ -50,9 +70,8 @@ def update_profile():
     flash('User not found', 'error')
     return redirect(url_for('home'))
 
-#not secured endpoint, should be protected with admin_required decorator
-#used in edit user form in admin edit user modal should be 2 different endpoints
 @app.post('/edit-account/<user_id>')
+@admin_required
 def edit_account(user_id):
     if user_id == session['user_id']:
         flash('You cannot edit your own account from the admin panel. Use the edit profile option in your profile settings.', 'error')
@@ -66,8 +85,11 @@ def edit_account(user_id):
     username = request.form.get('username')
     email = request.form.get('email')
     role = request.form.get('role')
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    bio = request.form.get('bio')
     
-    if user['username'] == username and user['email'] == email and user['role'] == role:
+    if user['username'] == username and user['email'] == email and user['role'] == role and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio:
         flash('No changes made to the account.', 'info')
         return redirect(url_for('user_management'))
 
@@ -85,6 +107,12 @@ def edit_account(user_id):
         user['email'] = email    
     if role in ['user', 'admin']:
         user['role'] = role
+    if first_name:
+        user['user_info']['first_name'] = first_name
+    if last_name:
+        user['user_info']['last_name'] = last_name
+    if bio:
+        user['user_info']['bio'] = bio
 
     flash('Account updated successfully!', 'success')
     return redirect(url_for('user_management'))

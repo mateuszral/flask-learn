@@ -94,9 +94,11 @@ def edit_account(user_id):
     username = request.form.get('username')
     email = request.form.get('email')
     role = request.form.get('role')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
+    first_name = request.form.get('firstName')
+    last_name = request.form.get('lastName')
     bio = request.form.get('bio')
+    reset_password = request.form.get('resetPassword')
+    reset_avatar = request.form.get('resetAvatar')
     
     if user['username'] == username and user['email'] == email and user['role'] == role and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio:
         flash('No changes made to the account.', 'info')
@@ -122,6 +124,11 @@ def edit_account(user_id):
         user['user_info']['last_name'] = last_name
     if bio:
         user['user_info']['bio'] = bio
+    if reset_password:
+        user['password'] = generate_password_hash('defaultpassword')
+        user['change_password'] = True
+    if reset_avatar:
+        user['avatar'] = 'static/img/default.png'
 
     flash('Account updated successfully!', 'success')
     return redirect(url_for('user_management'))

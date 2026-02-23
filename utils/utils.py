@@ -8,21 +8,24 @@ USERS = [
         "username": "admin",
         "email": "admin@admin.com",
         "password": generate_password_hash("admin"),
-        "role": "admin"
+        "role": "admin",
+        "change_password": False
     },
     {
         "id": "fd14e866-209f-4422-ba1c-e499910e9d76",
         "username": "johndoe",
         "email": "john@example.com",
         "password": generate_password_hash("password123"),
-        "role": "user"
+        "role": "user",
+        "change_password": False
     },
     {
         "id": "6c6590d6-a16f-444d-9e9b-b8de29e6174f",
         "username": "janedoe",
         "email": "jane@example.com",
         "password": generate_password_hash("securepass"),
-        "role": "user"
+        "role": "user",
+        "change_password": False
     }
 ]
 

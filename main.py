@@ -66,6 +66,18 @@ def edit_account(user_id):
     username = request.form.get('username')
     email = request.form.get('email')
     role = request.form.get('role')
+    
+    if user['username'] == username and user['email'] == email and user['role'] == role:
+        flash('No changes made to the account.', 'info')
+        return redirect(url_for('user_management'))
+
+    if any(u["username"] == username for u in USERS if u["id"] != user_id):
+        flash('Username already exists', 'error')
+        return redirect(url_for('user_management'))
+
+    if any(u["email"] == email for u in USERS if u["id"] != user_id):
+        flash('Email already exists', 'error')
+        return redirect(url_for('user_management'))
 
     if username:
         user['username'] = username
@@ -135,6 +147,8 @@ def change_password():
             return redirect(url_for('security'))
         
         user['password'] = generate_password_hash(new_password)
+        user['change_password'] = False
+        
         flash('Password changed successfully!', 'success')
         return redirect(url_for('security'))
     
@@ -167,6 +181,10 @@ def login():
             session.permanent = True
         else:
             session.permanent = False
+
+        if authenticated_user['change_password']:
+            flash('Login successful! You have to change your password.', 'info')
+            return redirect(url_for('security'))
 
         flash('Login successful!', 'success')
         return redirect(url_for('home'))
@@ -224,6 +242,8 @@ def register():
         'username': username,
         'email': email,
         'password': generate_password_hash(password),
+        'role': 'user',
+        'change_password': False
     }
     
     USERS.append(new_user)

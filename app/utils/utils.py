@@ -66,13 +66,13 @@ def admin_required(func):
         user = next((u for u in USERS if u['id'] == session['user_id']), None)
         if not user:
             flash('You must be logged in to access this page.', 'error')
-            return redirect(url_for('login_form'))
+            return redirect(url_for('auth.login_form'))
         
         if user['role'] == 'admin':
             return func(*args, **kwargs)
         
         flash('You do not have permission to access this page.', 'error')
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))
     
     wrapper.__name__ = func.__name__
     return wrapper

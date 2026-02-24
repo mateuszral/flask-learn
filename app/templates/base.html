@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar">
         <h2>
-            <a href="{{ url_for('home') }}">MyBrand</a>
+            <a href="{{ url_for('main.home') }}">MyBrand</a>
         </h2>
         <input type="checkbox" id="menu-toggle" class="menu-toggle">
         <label for="menu-toggle" class="hamburger">
@@ -22,14 +22,14 @@
             <span></span>
         </label>
         <ul>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('get_users') }}">Users</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('main.home') }}">Home</a></li>
+            <li><a href="{{ url_for('main.users') }}">Users</a></li>
+            <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
             {% if session.get('user_id') %}
-                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a href="{{ url_for('dashboard.dashboard_view') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
             {% else %}
-                <li><a href="{{ url_for('login') }}">Login / Register</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Login / Register</a></li>
             {% endif %}
         </ul>
     </nav>

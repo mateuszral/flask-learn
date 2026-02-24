@@ -13,7 +13,7 @@
                 <h3>Change Password</h3>
                 <p>Make sure your new password is strong and secure.</p>
 
-                <form method="POST" action="{{ url_for('change_password') }}" class="security-form">
+                <form method="POST" action="{{ url_for('profile.profile_change_password') }}" class="security-form">
 
                     <div class="password-wrapper">
                         <input type="password" name="current_password" id="currentPassword" placeholder="Current Password" required>
@@ -60,7 +60,7 @@
                         This action cannot be undone. All your data will be permanently removed.
                     </p>
 
-                    <form method="POST" action="{{ url_for('delete_account') }}">
+                    <form method="POST" action="{{ url_for('profile.profile_delete') }}">
                         <div class="modal-actions">
                             <button type="button" class="btn-secondary" onclick="toggleModal('deleteModal')">
                                 Cancel

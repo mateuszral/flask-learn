@@ -16,7 +16,7 @@
                             {% if user.avatar %}
                                 <img id="avatarPreview" src="{{ user.avatar }}" alt="User Avatar">
                             {% else %}
-                                <img id="avatarPreview" src="{{ url_for('static', filename='img/default.png') }}" alt="Default Avatar">
+                                <img id="avatarPreview" src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
                             {% endif %}
                         </div>
 
@@ -68,7 +68,7 @@
 
                 <div class="profile-actions">
                     <button type="submit" class="btn-primary">Update Profile</button>
-                    <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back to Dashboard</a>
+                    <a href="{{ url_for('dashboard.dashboard_view') }}" class="btn-secondary">Back to Dashboard</a>
                 </div>
 
             </div>

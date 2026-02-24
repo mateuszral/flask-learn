@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
@@ -56,9 +56,10 @@ def profile_update():
             
         if avatar.filename != '':
             filename = secure_filename(avatar.filename)
-            upload_path = os.path.join('app/static/uploads', filename)
+            os.makedirs(os.path.join(f'app/{current_app.config["UPLOAD_FOLDER"]}'), exist_ok=True)
+            upload_path = os.path.join(f'app/{current_app.config['UPLOAD_FOLDER']}', filename)
             avatar.save(upload_path)
-            user['avatar'] = f'/static/uploads/{filename}'
+            user['avatar'] = f'{current_app.config['UPLOAD_FOLDER']}/{filename}'
         
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile.profile_view'))

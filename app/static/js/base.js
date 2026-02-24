@@ -23,7 +23,7 @@ const toggleModal =(modalId, userId = null, email = null, username = null, role 
         document.getElementById("lastName").value = last_name;
         document.getElementById("age").value = age;
         document.getElementById("bio").value = bio;
-        document.getElementById("featured").checked = featured;
+        document.getElementById("featured").checked = featured === "True";
 
         form.action = `/edit-account/${userId}`;
     }

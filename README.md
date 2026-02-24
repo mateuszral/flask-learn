@@ -4,5 +4,6 @@
 - rembemer me feature ✅
 - admin template ✅
 - ts instead of js
-- edit acc - featured (admin), userinfo and avatar ✅
+- edit acc - featured (admin) - shows featured when not, userinfo and avatar ✅
 - featured users - avatar source ✅
+- refactor structure!! ✅

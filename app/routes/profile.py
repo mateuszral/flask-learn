@@ -18,7 +18,27 @@ def profile_view():
     session.clear()
     return redirect(url_for('main.home'))
 
-@profile.post('/profile')
+@profile.get('/profile/<string:user_id>')
+def profile_view_user(user_id):
+    user = next((u for u in USERS if u['id'] == user_id), None)
+    if user:
+        return render_template('profile.html', user=user)
+    
+    flash('User not found', 'error')
+    session.clear()
+    return redirect(url_for('main.home'))
+
+@profile.get('/profile/edit')
+def profile_edit():
+    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    if user:
+        return render_template('profile_edit.html', user=user)
+    
+    flash('User not found', 'error')
+    session.clear()
+    return redirect(url_for('main.home'))
+
+@profile.post('/profile/edit')
 def profile_update():
     user = next((u for u in USERS if u['id'] == session['user_id']), None)
     if user:

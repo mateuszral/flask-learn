@@ -1,80 +1,67 @@
 {% extends "base.html" %}
-{% block title %}Profile{% endblock %}
+{% block title %}User Profile{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
-
 {% block content %}
     <section class="profile-wrapper">
+
         <div class="profile-card">
-            
-            <form method="POST" class="profile-form" enctype="multipart/form-data">
-                <div class="profile-header">
-                    <div class="avatar-wrapper">
-                        <div class="avatar">
-                            {% if user.avatar %}
-                                <img id="avatarPreview" src="{{ user.avatar }}" alt="User Avatar">
-                            {% else %}
-                                <img id="avatarPreview" src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
-                            {% endif %}
-                        </div>
 
-                        <label for="avatarUpload" class="avatar-upload-btn">
-                            Change Avatar
-                        </label>
-                        <input type="file" id="avatarUpload" name="avatar" accept="image/png, image/jpeg" hidden>
-                    </div>
+            <div class="profile-header">
 
-                    <h2>{{ user.username }}</h2>
-
-                    {% if user.role == "admin" %}
-                        <div class="role-badge role-admin">Administrator</div>
+                <div class="avatar">
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar }}" alt="User Avatar">
                     {% else %}
-                        <div class="role-badge role-user">Standard User</div>
+                        <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
                     {% endif %}
                 </div>
 
+                <h2>{{ user.username }}</h2>
 
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" value="{{ user.username }}" required>
+                {% if user.role == "admin" %}
+                    <div class="role-badge role-admin">Administrator</div>
+                {% else %}
+                    <div class="role-badge role-user">Standard User</div>
+                {% endif %}
+
+                {% if user.featured %}
+                    <div class="featured-badge">Featured User</div>
+                {% endif %}
+
+            </div>
+
+            <div class="profile-info">
+
+                <div class="info-row">
+                    <span class="info-label">Full Name</span>
+                    <span>{{ user.user_info.first_name }} {{ user.user_info.last_name }}</span>
                 </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span>{{ user.email }}</span>
                 </div>
 
-                <div class="form-group">
-                    <label for="first_name">First name</label>
-                    <input type="text" id="first_name" name="first_name" value="{{ user.user_info.first_name }}" required>
+                <div class="info-row">
+                    <span class="info-label">Age</span>
+                    <span>{{ user.user_info.age }}</span>
                 </div>
 
-                <div class="form-group">
-                    <label for="last_name">Last name</label>
-                    <input type="text" id="last_name" name="last_name" value="{{ user.user_info.last_name }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="number" id="age" name="age" value="{{ user.user_info.age }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="bio">Bio</label>
-                    <textarea id="bio" name="bio" required>{{ user.user_info.bio }}</textarea>
-                </div>
-
-                <div class="profile-actions">
-                    <button type="submit" class="btn-primary">Update Profile</button>
-                    <a href="{{ url_for('dashboard.dashboard_view') }}" class="btn-secondary">Back to Dashboard</a>
+                <div class="info-column">
+                    <span class="info-label">Bio</span>
+                    <p>{{ user.user_info.bio }}</p>
                 </div>
 
             </div>
-        </form>
+
+            <div class="profile-actions">
+                <a href="{{ url_for('main.users_view') }}" class="btn-secondary">Back to Users</a>
+            </div>
+
+        </div>
 
     </section>
-
-    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}

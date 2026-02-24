@@ -2,24 +2,64 @@
 {% block title %}Users{% endblock %}
 {% block head %}
     {{ super() }}
-    <style type="text/css">
-        .users {
-            padding: 100px 6%;
-            background: #0f172a;
-            text-align: center;
-        }
-
-        .users h2 {
-            font-size: 2.2rem;
-            margin-bottom: 60px;
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users.css') }}">
 {% endblock %}
 
 {% block content %}
-    <section class="users">
-        <h2>Our Users</h2>
-        <p>Meet our amazing users who are part of our community.</p>
+    <section class="users-wrapper">
+
+        <div class="users-card">
+            <div class="users-header">
+                <h2>Users Directory</h2>
+                <p>View all registered users</p>
+            </div>
+
+            <div class="users-list">
+                {% for user in users %}
+                <div class="user-item">
+
+                    <div class="user-avatar">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar }}" alt="Avatar">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
+                        {% endif %}
+                    </div>
+
+                    <div class="user-main">
+                        <div class="user-top">
+                            <h3>{{ user.username }}</h3>
+
+                            {% if user.role == "admin" %}
+                                <span class="role-badge role-admin">Administrator</span>
+                            {% else %}
+                                <span class="role-badge role-user">Standard User</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="user-meta">
+                            <span>{{ user.user_info.first_name }} {{ user.user_info.last_name }}</span>
+                            <span>Age: {{ user.user_info.age }}</span>
+                            <span>{{ user.email }}</span>
+                        </div>
+
+                        <p class="user-bio">
+                            {{ user.user_info.bio }}
+                        </p>
+                    </div>
+
+                    {% if session.get('user_id') %}
+
+                        <div class="user-actions">
+                            <a href="{{ url_for('profile.profile_view_user', user_id=user.id) }}" class="btn-secondary">View</a>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </section>
 {% endblock %}

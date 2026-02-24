@@ -9,11 +9,11 @@ def home():
     return render_template('index.html', users=USERS)
 
 @main.get('/users')
-def users():
-    return render_template('users.html')
+def users_view():
+    return render_template('users.html', users=USERS)
 
 @main.get('/contact')
-def contact():
+def contact_view():
     return render_template('contact.html')
 
 @main.errorhandler(404)

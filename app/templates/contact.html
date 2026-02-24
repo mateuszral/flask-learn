@@ -1,25 +1,81 @@
 {% extends "base.html" %}
 {% block title %}Contact{% endblock %}
+
 {% block head %}
     {{ super() }}
-    <style type="text/css">
-        .contact {
-            padding: 100px 6%;
-            background: #0f172a;
-            text-align: center;
-        }
-
-        .contact h2 {
-            font-size: 2.2rem;
-            margin-bottom: 60px;
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
 {% endblock %}
 
 {% block content %}
-    <section class="contact">
-        <h2>Contact Us</h2>
-        <p>Have questions? Reach out to us and we'll get back to you as soon as possible.</p>
+    <section class="contact-wrapper">
+
+        <div class="contact-card">
+
+            <div class="contact-header">
+                <h2>Contact Us</h2>
+                <p>Have questions? We'd love to hear from you.</p>
+            </div>
+
+            <div class="contact-container">
+
+                <!-- Contact Info Section -->
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <p>Feel free to reach out through any of the following methods.</p>
+
+                    <div class="info-item">
+                        <span class="info-label">Email:</span>
+                        <span>support@example.com</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Phone:</span>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Address:</span>
+                        <span>123 Tech Street, Innovation City</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Working Hours:</span>
+                        <span>Mon - Fri, 9AM - 5PM</span>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <form method="POST" class="contact-form">
+
+                    <div class="form-group">
+                        <label for="name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="subject">Subject <span class="required">*</span></label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="message">Message <span class="required">*</span></label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <div class="contact-actions">
+                        <button type="submit" class="btn-primary">Send Message</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </section>
 {% endblock %}

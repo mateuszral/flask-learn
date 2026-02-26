@@ -1,9 +1,6 @@
-import uuid
-
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from werkzeug.security import generate_password_hash
 
-from ..utils.utils import USERS, authenticate_user
+from app.services.user_service import get_user_by_id, get_user_by_username, get_user_by_email, create_user, authenticate_user, get_user_by_username, get_user_by_email
 
 
 auth = Blueprint('auth', __name__)
@@ -22,16 +19,17 @@ def login():
     password = request.form.get('password')
     remember = request.form.get('remember')
     
-    authenticated_user = authenticate_user(email, password, USERS)
-    if authenticated_user: 
-        session['user_id'] = authenticated_user['id']
+    user = authenticate_user(email, password)
+    
+    if user: 
+        session['user_id'] = user.id
 
         if remember:
             session.permanent = True
         else:
             session.permanent = False
 
-        if authenticated_user['change_password']:
+        if user.change_password:
             flash('Login successful! You have to change your password.', 'info')
             return redirect(url_for('profile.profile_security'))
 
@@ -54,10 +52,9 @@ def forgot_password():
 def forgot_password_form():
     email = request.form.get('email')
     
-    for user in USERS:
-        if email == user['email']:
-            flash('Password reset link sent to your email (not really, this is a demo)', 'info')
-            return render_template('auth.html')
+    if get_user_by_email(email):
+        flash('Password reset link sent to your email (not really, this is a demo)', 'info')
+        return render_template('auth.html')
     
     flash('Email not found', 'error')
     return render_template('auth.html')
@@ -77,32 +74,16 @@ def register():
     password = request.form.get('password')
     confirm_password = request.form.get('confirm_password')
     
-    for user in USERS:
-        if username == user['username'] or email == user['email']:
-            flash('User with username/email already exists', 'error')
-            return render_template('auth.html')
+    if get_user_by_email(email) or get_user_by_username(username):
+        flash('User with username/email already exists', 'error')
+        return render_template('auth.html')
         
     if password != confirm_password:
         flash('Passwords are not the same', 'error')
         return render_template('auth.html')
         
-    new_user = {
-        'id': str(uuid.uuid4()),
-        'username': username,
-        'email': email,
-        'password': generate_password_hash(password),
-        'role': 'user',
-        'change_password': False,
-        'featured': False,
-        'user_info': {
-            "first_name": "",
-            "last_name": "",
-            "age": 0,
-            "bio": ""
-        },
-    }
+    create_user(username, email, password)
     
-    USERS.authend(new_user)
     flash('Account created successfully! You can now log in. Can change user info after login (first name, last name, age, bio)', 'success')
     return render_template('auth.html')
 

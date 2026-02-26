@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 
-from app.services.user_service import get_user_by_id, get_user_by_username, get_user_by_email, create_user, authenticate_user, get_user_by_username, get_user_by_email
+from app.services.user_service import get_user_by_username, get_user_by_email, create_user, authenticate_user, get_user_by_username, get_user_by_email
 
 
 auth = Blueprint('auth', __name__)
@@ -82,9 +82,12 @@ def register():
         flash('Passwords are not the same', 'error')
         return render_template('auth.html')
         
-    create_user(username, email, password)
+    user, message = create_user(username, email, password)
     
-    flash('Account created successfully! You can now log in. Can change user info after login (first name, last name, age, bio)', 'success')
+    if not user:
+        flash(message, 'error')
+    else:    
+        flash('Account created successfully! You can now log in. Can change user info after login (first name, last name, age, bio)', 'success')
     return render_template('auth.html')
 
 @auth.get('/logout')

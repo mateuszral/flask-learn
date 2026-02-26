@@ -1,21 +1,21 @@
-import uuid
-
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from werkzeug.security import generate_password_hash
 
-from ..utils.utils import USERS, admin_required
+from app.services.user_service import admin_edit_user, admin_create_user, admin_delete_user, get_all_users, get_user_by_email, get_user_by_username
+from app.utils.utils import admin_required
 
 admin = Blueprint('admin', __name__)
 
 @admin.get('/user-management')
 @admin_required
 def user_management():
-    return render_template('user_management.html', users=USERS)
+    users = get_all_users()
+    return render_template('user_management.html', users=users)
 
 @admin.get('/admin-panel')
 @admin_required
 def admin_panel():
-    return render_template('admin_panel.html', users=USERS)
+    users = get_all_users()
+    return render_template('admin_panel.html', users=users)
 
 @admin.post('/admin/add-user')
 @admin_required
@@ -25,27 +25,12 @@ def add_user():
     password = request.form.get('password')
     role = request.form.get('role')
 
-    if any(u["email"] == email for u in USERS) or any(u["username"] == username for u in USERS):
+    if get_user_by_username(username) or get_user_by_email(email):
         flash('User with username/email already exists', 'error')
         return redirect(url_for('admin.user_management'))
 
-    new_user = {
-        'id': str(uuid.uuid4()),
-        'username': username,
-        'email': email,
-        'password': generate_password_hash(password),
-        'role': role,
-        'change_password': True,
-        'featured': False,
-        'user_info': {
-            'first_name': '',
-            'last_name': '',
-            'age': 0,
-            'bio': ''
-        },
-    }
-
-    USERS.append(new_user)
+    admin_create_user(username, email, password, role)
+    
     flash('User created successfully! Have to change password on first login', 'success')
     return redirect(url_for('admin.user_management'))
 
@@ -54,11 +39,6 @@ def add_user():
 def edit_account(user_id):
     if user_id == session['user_id']:
         flash('You cannot edit your own account from the admin panel. Use the edit profile option in your profile settings.', 'error')
-        return redirect(url_for('admin.user_management'))
-    
-    user = next((u for u in USERS if u['id'] == user_id), None)
-    if not user:
-        flash('User not found', 'error')
         return redirect(url_for('admin.user_management'))
     
     username = request.form.get('username')
@@ -72,54 +52,30 @@ def edit_account(user_id):
     reset_password = request.form.get('resetPassword')
     reset_avatar = request.form.get('resetAvatar')
     
-    if user['username'] == username and user['email'] == email and user['role'] == role and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio and user['user_info']['age'] == age and user['featured'] == featured and not reset_password and not reset_avatar:
-        flash('No changes made to the account.', 'info')
+    updated_user, message = admin_edit_user(user_id, username, email, role, first_name, last_name, bio, age, featured, reset_password, reset_avatar)
+
+    if not updated_user:
+        flash(message, 'error')
         return redirect(url_for('admin.user_management'))
+    elif message == "No changes made to the account.":
+        flash(message, 'info')
+    else:
+        flash(message, 'success')
 
-    if any(u["username"] == username for u in USERS if u["id"] != user_id):
-        flash('Username already exists', 'error')
-        return redirect(url_for('admin.user_management'))
-
-    if any(u["email"] == email for u in USERS if u["id"] != user_id):
-        flash('Email already exists', 'error')
-        return redirect(url_for('admin.user_management'))
-
-    if username:
-        user['username'] = username
-    if email:
-        user['email'] = email    
-    if role in ['user', 'admin']:
-        user['role'] = role
-    if first_name:
-        user['user_info']['first_name'] = first_name
-    if last_name:
-        user['user_info']['last_name'] = last_name
-    if bio:
-        user['user_info']['bio'] = bio
-    if age:
-        user['user_info']['age'] = age
-    if featured:
-        user['featured'] = featured
-    if reset_password:
-        user['password'] = generate_password_hash('defaultpassword')
-        user['change_password'] = True
-    if reset_avatar:
-        user['avatar'] = 'static/uploads/default.png'
-
-    flash('Account updated successfully!', 'success')
     return redirect(url_for('admin.user_management'))
 
 @admin.post('/delete-account/<user_id>')
-def delete_account(user_id):
+@admin_required
+def admin_delete_account(user_id):
     if user_id == session['user_id']:
         flash('You cannot delete your own account from the admin panel. Use the delete account option in your profile settings.', 'error')
         return redirect(url_for('admin.user_management'))
         
-    user = next((u for u in USERS if u['id'] == user_id), None)
-    if user:
-        USERS.remove(user)
-        flash('User deleted successfully!', 'success')
+    user, message = admin_delete_user(user_id)
+    
+    if not user:
+        flash(message, 'error')
     else:
-        flash('User not found', 'error')
+        flash(message, 'success')
         
     return redirect(url_for('admin.user_management'))

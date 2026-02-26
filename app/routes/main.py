@@ -1,16 +1,19 @@
 from flask import Blueprint, render_template
 
-from ..utils.utils import USERS
+from app.services.user_service import get_all_users
+
 
 main = Blueprint('main', __name__)
 
 @main.get('/')
 def home():
-    return render_template('index.html', users=USERS)
+    users = get_all_users()
+    return render_template('index.html', users=users)
 
 @main.get('/users')
 def users_view():
-    return render_template('users.html', users=USERS)
+    users = get_all_users()
+    return render_template('users.html', users=users)
 
 @main.get('/contact')
 def contact_view():

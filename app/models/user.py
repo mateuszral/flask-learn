@@ -9,7 +9,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
-    change_password = db.Column(db.Boolean, default=False)
+    change_password = db.Column(db.Boolean, default=True)
     featured = db.Column(db.Boolean, default=False)
     avatar = db.Column(db.String(255), nullable=True)
     

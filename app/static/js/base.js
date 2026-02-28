@@ -10,7 +10,7 @@ const togglePassword = (id, el) => {
     }
 }
 
-const toggleModal =(modalId, userId = null, email = null, username = null, role = null, first_name = null, last_name = null, age = null, bio = null, featured = null) => {
+const toggleModal = (modalId, userId = null, email = null, username = null, role = null, first_name = null, last_name = null, age = null, bio = null, featured = null) => {
     const modal = document.querySelector(`#${modalId}`);
 
     if (modalId === 'editModal') {
@@ -25,14 +25,14 @@ const toggleModal =(modalId, userId = null, email = null, username = null, role 
         document.getElementById("bio").value = bio;
         document.getElementById("featured").checked = featured === "True";
 
-        form.action = `/edit-account/${userId}`;
+        form.action = `/admin/edit-user/${userId}`;
     }
 
     if (modalId === 'deleteModal' && userId) {
         const deleteForm = document.getElementById('deleteForm');
         const deleteMessage = document.getElementById('deleteMessage');
         deleteMessage.innerHTML = `Are you sure you want to delete user with email <strong>${email}</strong>? This action cannot be undone.`;
-        deleteForm.action = `/delete-account/${userId}`;
+        deleteForm.action = `/admin/delete-user/${userId}`;
     }
 
     modal.classList.toggle('visible');
@@ -78,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-closeFlash = (button) => {
+const closeFlash = (button) => {
     const flash = button.closest(".flash");
     removeFlash(flash);
 }
 
-removeFlash = (flash) => {
+const removeFlash = (flash) => {
     flash.classList.add("fade-out");
     setTimeout(() => flash.remove(), 300);
 }

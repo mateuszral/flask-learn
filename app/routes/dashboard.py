@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 
-from ..utils.utils import USERS
+from app.services.user_service import get_user_by_id
+
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -10,9 +11,9 @@ def dashboard_view():
         flash('You must be logged in to access the dashboard.', 'error')
         return redirect(url_for('auth.login_form'))
     
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    user = get_user_by_id(session['user_id'])
     
-    if user['change_password']:
+    if user.change_password:
         flash('You must change your password before accessing the dashboard.', 'error')
         return redirect(url_for('profile.profile_security'))
     

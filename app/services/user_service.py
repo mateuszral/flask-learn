@@ -33,17 +33,98 @@ def create_user(username, email, password):
         password=generate_password_hash(password),
     )
     
+    user.user_info = UserInfo(
+        first_name='',
+        last_name='',
+        age=None,
+        bio=''
+    )
+    
     db.session.add(user)
-    db.session.commit()
-    
-    user_info = UserInfo(user_id=user.id)
-    
-    db.session.add(user_info)
     db.session.commit()
     
     return user, "User created successfully! Have to change password on first login"
 
+def edit_user(user_id, username, email, first_name, last_name, bio, age, reset_avatar=False):
+    user = User.query.get(user_id)
+    
+    if not user:
+        return None, "User not found"
+    
+    no_changes = (
+        user.username == username and
+        user.email == email and
+        user.user_info.first_name == first_name and
+        user.user_info.last_name == last_name and
+        user.user_info.bio == bio and
+        str(user.user_info.age) == str(age)
+    )
+    
+    if no_changes:
+        return user, "No changes made to the account."
+    
+    existing_username = User.query.filter(
+        User.username == username,
+        User.id != user_id
+    ).first()
+
+    if existing_username:
+        return None, "Username already exists"
+
+    existing_email = User.query.filter(
+        User.email == email,
+        User.id != user_id
+    ).first()
+
+    if existing_email:
+        return None, "Email already exists"
+    
+    user.username = username
+    user.email = email
+    user.user_info.first_name = first_name
+    user.user_info.last_name = last_name
+    user.user_info.bio = bio
+    user.user_info.age = age
+    
+    if reset_avatar:
+        user.avatar = None
+    
+    db.session.commit()
+    
+    return user, "Account updated successfully!"
+
+def change_password(user_id, current_password, new_password, confirm_password):
+    user = User.query.get(user_id)
+    
+    if not user:
+        return None, "User not found"
+    
+    if not check_password_hash(user.password, current_password):
+        return None, "Current password is incorrect"
+    
+    if new_password != confirm_password:
+        return None, "New passwords do not match"
+    
+    user.password = generate_password_hash(new_password)
+    user.change_password = False
+    db.session.commit()
+    
+    return user, "Password changed successfully!"
+
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return None, "User not found"
+    
+    db.session.delete(user)
+    db.session.commit()
+    
+    return user, "User deleted successfully!"
+
 def admin_create_user(username, email, password, role):
+    if get_user_by_username(username) or get_user_by_email(email):
+        return None, "User with username/email already exists"
+    
     user = User(
         username=username,
         email=email,
@@ -60,7 +141,7 @@ def admin_create_user(username, email, password, role):
     
     return user
 
-def admin_edit_user(user_id, username, email, role, first_name, last_name, bio, age, featured, reset_password=False, reset_avatar=False):
+def admin_edit_user(user_id, username, email, role, first_name, last_name, bio, age, featured, change_password=False, reset_avatar=False):
     user = User.query.get(user_id)
     
     if not user:
@@ -75,7 +156,7 @@ def admin_edit_user(user_id, username, email, role, first_name, last_name, bio, 
         user.user_info.bio == bio and
         str(user.user_info.age) == str(age) and
         user.featured == featured and
-        not reset_password and
+        not change_password and
         not reset_avatar
     )
     
@@ -104,7 +185,7 @@ def admin_edit_user(user_id, username, email, role, first_name, last_name, bio, 
     if role in ['user', 'admin']:
         user.role = role
     
-    if reset_password:
+    if change_password:
         user.password = generate_password_hash('zaq1@WSX')
         user.change_password = True
     
@@ -120,12 +201,3 @@ def admin_edit_user(user_id, username, email, role, first_name, last_name, bio, 
     db.session.commit()
     
     return user, "Account updated successfully!"
-
-def admin_delete_user(user_id):
-    user = User.query.get(user_id)
-    if not user:
-        return None, "User not found"
-    
-    db.session.delete(user)
-    db.session.commit()
-    return user, "User deleted successfully!"

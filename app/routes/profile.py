@@ -1,16 +1,18 @@
 import os
 
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, current_app
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
-from ..utils.utils import USERS, authenticate_user
+from app.services.user_service import change_password, delete_user, edit_user, get_user_by_id
+from ..utils.utils import authenticate_user
+
 
 profile = Blueprint('profile', __name__)
 
 @profile.get('/profile')
 def profile_view():
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    user = get_user_by_id(session['user_id'])
     if user:
         return render_template('profile.html', user=user)
     
@@ -20,7 +22,7 @@ def profile_view():
 
 @profile.get('/profile/<string:user_id>')
 def profile_view_user(user_id):
-    user = next((u for u in USERS if u['id'] == user_id), None)
+    user = get_user_by_id(user_id)
     if user:
         return render_template('profile.html', user=user)
     
@@ -29,8 +31,8 @@ def profile_view_user(user_id):
     return redirect(url_for('main.home'))
 
 @profile.get('/profile/edit')
-def profile_edit():
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+def profile_edit_view():
+    user = get_user_by_id(session['user_id'])
     if user:
         return render_template('profile_edit.html', user=user)
     
@@ -39,71 +41,47 @@ def profile_edit():
     return redirect(url_for('main.home'))
 
 @profile.post('/profile/edit')
-def profile_update():
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
-    if user:
-        username = request.form.get('username')
-        email = request.form.get('email')
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
-        bio = request.form.get('bio')
-        age = request.form.get('age')
-        avatar = request.files.get('avatar')
-        
-        if user['username'] == username and user['email'] == email and user['user_info']['first_name'] == first_name and user['user_info']['last_name'] == last_name and user['user_info']['bio'] == bio and user['user_info']['age'] == age and not avatar:
-            flash('No changes made to the account.', 'info')
-            return redirect(url_for('profile.profile_view'))
+def profile_edit():    
+    user_id = session['user_id']
+    
+    username = request.form.get('username')
+    email = request.form.get('email')
+    role = request.form.get('role')
+    first_name = request.form.get('firstName')
+    last_name = request.form.get('lastName')
+    bio = request.form.get('bio')
+    age = request.form.get('age')
+    reset_avatar = request.form.get('resetAvatar')
+    
+    updated_user, message = edit_user(user_id, username, email, first_name, last_name, bio, age, reset_avatar)
 
-        if any(u["username"] == username for u in USERS if u["id"] != session['user_id']):
-            flash('Username already exists', 'error')
-            return redirect(url_for('profile.profile_view'))
-
-        if any(u["email"] == email for u in USERS if u["id"] != session['user_id']):
-            flash('Email already exists', 'error')
-            return redirect(url_for('profile.profile_view'))
-
-        if first_name:
-            user['user_info']['first_name'] = first_name
-        if last_name:
-            user['user_info']['last_name'] = last_name
-        if bio:
-            user['user_info']['bio'] = bio
-            user['username'] = username
-        if email:
-            user['email'] = email
-        if age:
-            user['user_info']['age'] = age
-            
-        if avatar.filename != '':
-            filename = secure_filename(avatar.filename)
-            os.makedirs(os.path.join(f'app/{current_app.config["UPLOAD_FOLDER"]}'), exist_ok=True)
-            upload_path = os.path.join(f'app/{current_app.config['UPLOAD_FOLDER']}', filename)
-            avatar.save(upload_path)
-            user['avatar'] = f'{current_app.config['UPLOAD_FOLDER']}/{filename}'
-        
-        flash('Profile updated successfully!', 'success')
+    if not updated_user:
+        flash(message, 'error')
         return redirect(url_for('profile.profile_view'))
+    elif message == "No changes made to the account.":
+        flash(message, 'info')
+    else:
+        flash(message, 'success')
 
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    return redirect(url_for('profile.profile_view'))
 
 @profile.post('/delete-account')
 def profile_delete():
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
-    if user:
-        USERS.remove(user)
-        session.clear()
-        flash('Your account has been deleted.', 'info')
-        return redirect(url_for('main.home'))
+    user_id = session['user_id']
     
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    deleted_user, message = delete_user(user_id)
+    
+    if not deleted_user:
+        flash(message, 'error')
+        return redirect(url_for('profile.profile_view'))
+    else:
+        flash(message, 'success')
+        session.clear()
+        return redirect(url_for('main.home'))
 
 @profile.get('/security')
 def profile_security():
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
+    user = get_user_by_id(session['user_id'])
     if user:
         return render_template('security.html', user=user)
     
@@ -113,31 +91,16 @@ def profile_security():
 
 @profile.post('/change-password')
 def profile_change_password():
-    user = next((u for u in USERS if u['id'] == session['user_id']), None)
-    if user:
-        current_password = request.form.get('current_password')
-        new_password = request.form.get('new_password')
-        confirm_password = request.form.get('confirm_password')
-
-        if not authenticate_user(user['email'], current_password, USERS):
-            flash('Current password is incorrect', 'error')
-            return redirect(url_for('profile.profile_security'))
-        
-        
-        if new_password != confirm_password:
-            flash('New passwords do not match', 'error')
-            return redirect(url_for('profile.profile_security'))
-        
-        if current_password == new_password:
-            flash('New password cannot be the same as the current password', 'error')
-            return redirect(url_for('profile.profile_security'))
-        
-        user['password'] = generate_password_hash(new_password)
-        user['change_password'] = False
-        
-        flash('Password changed successfully!', 'success')
-        return redirect(url_for('profile.profile_security'))
+    user_id = session['user_id']
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    confirm_new_password = request.form.get('confirm_password')
     
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    user, message = change_password(user_id, current_password, new_password, confirm_new_password)
+    
+    if not user:
+        flash(message, 'error')
+    else:
+        flash(message, 'success')
+    
+    return redirect(url_for('profile.profile_security'))

@@ -1,7 +1,10 @@
-from flask import flash, redirect, session, url_for
+from functools import wraps
+
+from flask import abort, flash, redirect, url_for
+from flask_login import current_user
 from werkzeug.security import check_password_hash
 
-from app.services.user_service import get_user_by_email, get_user_by_id
+from app.services.user_service import get_user_by_email
 
 def authenticate_user(email, password):
     user = get_user_by_email(email)
@@ -11,18 +14,15 @@ def authenticate_user(email, password):
 
     return None
 
-def admin_required(func):
-    def wrapper(*args, **kwargs):
-        user = get_user_by_id(session['user_id'])
-        if not user:
-            flash('You must be logged in to access this page.', 'error')
-            return redirect(url_for('auth.login_form'))
-        
-        if user.role == 'admin':
-            return func(*args, **kwargs)
-        
-        flash('You do not have permission to access this page.', 'error')
-        return redirect(url_for('main.home'))
-    
-    wrapper.__name__ = func.__name__
-    return wrapper
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            abort(401)
+
+        if current_user.role != "admin":
+            abort(403)
+
+        return f(*args, **kwargs)
+
+    return decorated_function

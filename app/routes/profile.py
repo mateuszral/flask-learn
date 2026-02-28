@@ -1,4 +1,5 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_required, current_user, logout_user
 
 from app.services.user_service import change_password, delete_user, edit_user, get_user_by_id
 
@@ -6,39 +7,23 @@ from app.services.user_service import change_password, delete_user, edit_user, g
 profile = Blueprint('profile', __name__)
 
 @profile.get('/profile')
+@login_required
 def profile_view():
-    user = get_user_by_id(session['user_id'])
-    if user:
-        return render_template('profile.html', user=user)
-    
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    return render_template('profile.html', user=current_user)
 
 @profile.get('/profile/<string:user_id>')
+@login_required
 def profile_view_user(user_id):
-    user = get_user_by_id(user_id)
-    if user:
-        return render_template('profile.html', user=user)
-    
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    return render_template('profile.html', user=current_user)
 
 @profile.get('/profile/edit')
+@login_required
 def profile_edit_view():
-    user = get_user_by_id(session['user_id'])
-    if user:
-        return render_template('profile_edit.html', user=user)
-    
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    return render_template('profile_edit.html', user=current_user)
 
 @profile.post('/profile/edit')
-def profile_edit():    
-    user_id = session['user_id']
-    
+@login_required
+def profile_edit():        
     username = request.form.get('username')
     email = request.form.get('email')
     first_name = request.form.get('first_name')
@@ -48,7 +33,7 @@ def profile_edit():
     avatar = request.files.get('avatar')
     reset_avatar = request.form.get('resetAvatar')
     
-    updated_user, message = edit_user(user_id, username, email, first_name, last_name, bio, age, avatar, reset_avatar)
+    updated_user, message = edit_user(current_user.id, username, email, first_name, last_name, bio, age, avatar, reset_avatar)
 
     if not updated_user:
         flash(message, 'error')
@@ -61,37 +46,31 @@ def profile_edit():
     return redirect(url_for('profile.profile_edit_view'))
 
 @profile.post('/delete-account')
-def profile_delete():
-    user_id = session['user_id']
-    
-    deleted_user, message = delete_user(user_id)
+@login_required
+def profile_delete():    
+    deleted_user, message = delete_user(current_user.id)
     
     if not deleted_user:
         flash(message, 'error')
         return redirect(url_for('profile.profile_view'))
     else:
         flash(message, 'success')
-        session.clear()
+        logout_user()
         return redirect(url_for('main.home'))
 
 @profile.get('/security')
+@login_required
 def profile_security():
-    user = get_user_by_id(session['user_id'])
-    if user:
-        return render_template('security.html', user=user)
-    
-    flash('User not found', 'error')
-    session.clear()
-    return redirect(url_for('main.home'))
+    return render_template('security.html', user=current_user)
 
 @profile.post('/change-password')
+@login_required
 def profile_change_password():
-    user_id = session['user_id']
     current_password = request.form.get('current_password')
     new_password = request.form.get('new_password')
     confirm_new_password = request.form.get('confirm_password')
     
-    user, message = change_password(user_id, current_password, new_password, confirm_new_password)
+    user, message = change_password(current_user.id, current_password, new_password, confirm_new_password)
     
     if not user:
         flash(message, 'error')

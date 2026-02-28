@@ -25,11 +25,11 @@
             <li><a href="{{ url_for('main.home') }}">Home</a></li>
             <li><a href="{{ url_for('main.users_view') }}">Users</a></li>
             <li><a href="{{ url_for('main.contact_view') }}">Contact</a></li>
-            {% if session.get('user_id') %}
+            {% if current_user.is_authenticated  %}
                 <li><a href="{{ url_for('dashboard.dashboard_view') }}">Dashboard</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
             {% else %}
-                <li><a href="{{ url_for('auth.login') }}">Login / Register</a></li>
+                <li><a href="{{ url_for('auth.login_form') }}">Login / Register</a></li>
             {% endif %}
         </ul>
     </nav>

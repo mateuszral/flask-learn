@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import current_user, login_user, logout_user, login_required
 
 from app.services.user_service import get_user_by_username, get_user_by_email, create_user, authenticate_user, get_user_by_username, get_user_by_email
 
@@ -7,7 +8,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.get('/login')
 def login_form():
-    if 'user_id' in session:
+    if current_user.is_authenticated:
         flash('You are already logged in.', 'info')
         return redirect(url_for('main.home'))
         
@@ -22,12 +23,7 @@ def login():
     user = authenticate_user(email, password)
     
     if user: 
-        session['user_id'] = user.id
-
-        if remember:
-            session.permanent = True
-        else:
-            session.permanent = False
+        login_user(user, remember=remember)
 
         if user.change_password:
             flash('Login successful! You have to change your password.', 'info')
@@ -40,15 +36,13 @@ def login():
     return render_template('auth.html')
 
 @auth.get('/forgot-password')
+@login_required
 def forgot_password():
-    if 'user_id' in session:
-        return render_template('forgot_password.html')
-    
-    flash('You must be logged in to access this page.', 'error')
-    return redirect(url_for('auth.login_form'))
+    return render_template('forgot_password.html')
 
 
 @auth.post('/forgot-password')
+@login_required
 def forgot_password_form():
     email = request.form.get('email')
     
@@ -61,7 +55,7 @@ def forgot_password_form():
 
 @auth.get('/register')
 def register_form():
-    if 'user_id' in session:
+    if current_user.is_authenticated:
         flash('You are already logged in.', 'info')
         return redirect(url_for('main.home'))
         
@@ -92,6 +86,6 @@ def register():
 
 @auth.get('/logout')
 def logout():
-    session.clear()
+    logout_user()
     flash('You have been logged out.', 'info')
-    return redirect('/')
+    return redirect(url_for('main.home'))

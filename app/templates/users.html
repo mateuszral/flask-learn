@@ -48,7 +48,7 @@
                         </p>
                     </div>
 
-                    {% if session.get('user_id') %}
+                    {% if current_user.is_authenticated %}
 
                         <div class="user-actions">
                             <a href="{{ url_for('profile.profile_view_user', user_id=user.id) }}" class="btn-secondary">View</a>

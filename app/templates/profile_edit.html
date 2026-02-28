@@ -14,7 +14,7 @@
                     <div class="avatar-wrapper">
                         <div class="avatar">
                             {% if user.avatar %}
-                                <img id="avatarPreview" src="{{ user.avatar }}" alt="User Avatar">
+                                <img id="avatarPreview" src="{{ url_for('static', filename=user.avatar.replace('static/', '')) }}" alt="User Avatar">
                             {% else %}
                                 <img id="avatarPreview" src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
                             {% endif %}

@@ -13,7 +13,7 @@
 
                 <div class="avatar">
                     {% if user.avatar %}
-                        <img src="{{ user.avatar }}" alt="User Avatar">
+                        <img src="{{ url_for('static', filename=user.avatar.replace('static/', '')) }}" alt="User Avatar">
                     {% else %}
                         <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
                     {% endif %}

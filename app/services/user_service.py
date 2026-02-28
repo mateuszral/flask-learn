@@ -1,4 +1,8 @@
+import os
+
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+from flask import current_app
 
 from app import db
 from app.models import User, UserInfo
@@ -45,7 +49,7 @@ def create_user(username, email, password):
     
     return user, "User created successfully! Have to change password on first login"
 
-def edit_user(user_id, username, email, first_name, last_name, bio, age, reset_avatar=False):
+def edit_user(user_id, username, email, first_name, last_name, bio, age, avatar, reset_avatar=False):
     user = User.query.get(user_id)
     
     if not user:
@@ -57,7 +61,9 @@ def edit_user(user_id, username, email, first_name, last_name, bio, age, reset_a
         user.user_info.first_name == first_name and
         user.user_info.last_name == last_name and
         user.user_info.bio == bio and
-        str(user.user_info.age) == str(age)
+        str(user.user_info.age) == str(age) and
+        not avatar and
+        not reset_avatar
     )
     
     if no_changes:
@@ -85,6 +91,13 @@ def edit_user(user_id, username, email, first_name, last_name, bio, age, reset_a
     user.user_info.last_name = last_name
     user.user_info.bio = bio
     user.user_info.age = age
+    
+    if avatar:
+        filename = secure_filename(avatar.filename)
+        os.makedirs(os.path.join('app', current_app.config["UPLOAD_FOLDER"]), exist_ok=True)
+        upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
+        avatar.save(os.path.join('app', upload_path))
+        user.avatar = f'{current_app.config["UPLOAD_FOLDER"]}/{filename}'
     
     if reset_avatar:
         user.avatar = None

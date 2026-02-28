@@ -20,7 +20,7 @@
                     <div class="user-card">
                         <!-- to change after uploading avatars to server -->
                         {% if user.avatar %}
-                            <img src="{{ user.avatar }}" />
+                            <img src="{{ url_for('static', filename=user.avatar.replace('static/', '')) }}" />
                         {% else %}
                             <img src="{{ url_for('static', filename='uploads/default.png') }}" />
                         {% endif %}

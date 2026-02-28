@@ -1,11 +1,6 @@
-import os
-
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from werkzeug.security import generate_password_hash
-from werkzeug.utils import secure_filename
 
 from app.services.user_service import change_password, delete_user, edit_user, get_user_by_id
-from ..utils.utils import authenticate_user
 
 
 profile = Blueprint('profile', __name__)
@@ -46,24 +41,24 @@ def profile_edit():
     
     username = request.form.get('username')
     email = request.form.get('email')
-    role = request.form.get('role')
-    first_name = request.form.get('firstName')
-    last_name = request.form.get('lastName')
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
     bio = request.form.get('bio')
     age = request.form.get('age')
+    avatar = request.files.get('avatar')
     reset_avatar = request.form.get('resetAvatar')
     
-    updated_user, message = edit_user(user_id, username, email, first_name, last_name, bio, age, reset_avatar)
+    updated_user, message = edit_user(user_id, username, email, first_name, last_name, bio, age, avatar, reset_avatar)
 
     if not updated_user:
         flash(message, 'error')
-        return redirect(url_for('profile.profile_view'))
+        return redirect(url_for('profile.profile_edit_view'))
     elif message == "No changes made to the account.":
         flash(message, 'info')
     else:
         flash(message, 'success')
 
-    return redirect(url_for('profile.profile_view'))
+    return redirect(url_for('profile.profile_edit_view'))
 
 @profile.post('/delete-account')
 def profile_delete():

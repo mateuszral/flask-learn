@@ -16,47 +16,45 @@
 
             <div class="users-list">
                 {% for user in users %}
-                <div class="user-item">
+                    <div class="user-item">
 
-                    <div class="user-avatar">
-                        {% if user.avatar %}
-                            <img src="{{ user.avatar }}" alt="Avatar">
-                        {% else %}
-                            <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
-                        {% endif %}
-                    </div>
-
-                    <div class="user-main">
-                        <div class="user-top">
-                            <h3>{{ user.username }}</h3>
-
-                            {% if user.role == "admin" %}
-                                <span class="role-badge role-admin">Administrator</span>
+                        <div class="user-avatar">
+                            {% if user.avatar %}
+                                <img src="{{ user.avatar }}" alt="Avatar">
                             {% else %}
-                                <span class="role-badge role-user">Standard User</span>
+                                <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
                             {% endif %}
                         </div>
 
-                        <div class="user-meta">
-                            <span>{{ user.user_info.first_name }} {{ user.user_info.last_name }}</span>
-                            <span>Age: {{ user.user_info.age }}</span>
-                            <span>{{ user.email }}</span>
+                        <div class="user-main">
+                            <div class="user-top">
+                                <h3>{{ user.username }}</h3>
+
+                                {% if user.role == "admin" %}
+                                    <span class="role-badge role-admin">Administrator</span>
+                                {% else %}
+                                    <span class="role-badge role-user">Standard User</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="user-meta">
+                                <span>{{ user.user_info.first_name }} {{ user.user_info.last_name }}</span>
+                                <span>Age: {{ user.user_info.age }}</span>
+                                <span>{{ user.email }}</span>
+                            </div>
+
+                            <p class="user-bio">
+                                {{ user.user_info.bio }}
+                            </p>
                         </div>
 
-                        <p class="user-bio">
-                            {{ user.user_info.bio }}
-                        </p>
+                        {% if current_user.is_authenticated %}
+                            <div class="user-actions">
+                                <a href="{{ url_for('profile.profile_view_user', user_id=user.id) }}" class="btn-secondary">View</a>
+                            </div>
+                        {% endif %}
+
                     </div>
-
-                    {% if current_user.is_authenticated %}
-
-                        <div class="user-actions">
-                            <a href="{{ url_for('profile.profile_view_user', user_id=user.id) }}" class="btn-secondary">View</a>
-                        </div>
-
-                    {% endif %}
-
-                </div>
                 {% endfor %}
             </div>
         </div>

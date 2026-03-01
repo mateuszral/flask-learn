@@ -14,7 +14,12 @@ def profile_view():
 @profile.get('/profile/<string:user_id>')
 @login_required
 def profile_view_user(user_id):
-    return render_template('profile.html', user=current_user)
+    user = get_user_by_id(user_id)
+    if user:
+        return render_template('profile.html', user=user)
+    else:
+        flash("User not found.", 'error')
+        return redirect(url_for('main.home'))
 
 @profile.get('/profile/edit')
 @login_required

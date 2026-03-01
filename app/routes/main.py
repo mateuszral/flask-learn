@@ -1,18 +1,19 @@
 from flask import Blueprint, render_template
 
-from app.services.user_service import get_all_users
+from app.services.user_service import get_users_by_page, get_featured_users
 
 
 main = Blueprint('main', __name__)
 
 @main.get('/')
 def home():
-    users = get_all_users()
-    return render_template('index.html', users=users)
+    featured_users = get_featured_users()
+    return render_template('index.html', users=featured_users)
 
 @main.get('/users')
-def users_view():
-    users = get_all_users()
+@main.get('/users/<int:page>')
+def users_view(page=1):
+    users = get_users_by_page(page)
     return render_template('users.html', users=users)
 
 @main.get('/contact')

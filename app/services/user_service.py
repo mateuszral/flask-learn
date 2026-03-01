@@ -11,6 +11,12 @@ from app.models import User, UserInfo
 def get_all_users():
     return User.query.all()
 
+def get_users_by_page(page, per_page=2):
+    return User.query.paginate(page=page, per_page=per_page, error_out=False)
+
+def get_featured_users():
+    return User.query.filter_by(featured = True)
+
 def get_user_by_id(user_id):
     return User.query.get(user_id)
 

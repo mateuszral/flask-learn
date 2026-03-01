@@ -10,7 +10,7 @@
 
         <div class="users-card">
             <div class="users-header">
-                <h2>Users Directory</h2>
+                <h2>Users</h2>
                 <p>View all registered users</p>
             </div>
 
@@ -20,9 +20,9 @@
 
                         <div class="user-avatar">
                             {% if user.avatar %}
-                                <img src="{{ user.avatar }}" alt="Avatar">
+                                <img id="avatarPreview" src="{{ url_for('static', filename=user.avatar.replace('static/', '')) }}" alt="User Avatar">
                             {% else %}
-                                <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
+                                <img id="avatarPreview" src="{{ url_for('static', filename='uploads/default.png') }}" alt="Default Avatar">
                             {% endif %}
                         </div>
 
@@ -38,7 +38,10 @@
                             </div>
 
                             <div class="user-meta">
-                                <span>{{ user.user_info.first_name }} {{ user.user_info.last_name }}</span>
+                                <span>
+                                    {{ user.user_info.first_name }} 
+                                    {{ user.user_info.last_name }}
+                                </span>
                                 <span>Age: {{ user.user_info.age }}</span>
                                 <span>{{ user.email }}</span>
                             </div>
@@ -54,6 +57,17 @@
 
                     </div>
                 {% endfor %}
+                <div class="pagination">
+                    {% if users.has_prev %}
+                        <a href="{{ url_for('main.users_view', page=users.prev_num) }}" class="page-link">&lt;&lt; Previous</a>
+                    {% endif %}
+
+                    <span class="page-number">Page {{ users.page }} of {{ users.pages }}</span>
+
+                    {% if users.has_next %}
+                        <a href="{{ url_for('main.users_view', page=users.next_num) }}" class="page-link">Next &gt;&gt;</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
 

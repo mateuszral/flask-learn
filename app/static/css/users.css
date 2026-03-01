@@ -129,6 +129,35 @@
     color: #38bdf8;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.pagination .page-link {
+    text-decoration: none;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.pagination .page-link:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+    transition: 0.2s ease-in-out;
+}
+
+.page-number {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: #fff;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
     .user-item {

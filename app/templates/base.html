@@ -23,7 +23,7 @@
         </label>
         <ul>
             <li><a href="{{ url_for('main.home') }}">Home</a></li>
-            <li><a href="{{ url_for('main.users_view') }}">Users</a></li>
+            <li><a href="{{ url_for('main.users_view', page=1) }}">Users</a></li>
             <li><a href="{{ url_for('main.contact_view') }}">Contact</a></li>
             {% if current_user.is_authenticated  %}
                 <li><a href="{{ url_for('dashboard.dashboard_view') }}">Dashboard</a></li>

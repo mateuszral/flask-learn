@@ -19,10 +19,10 @@ const toggleModal = (modalId, userId = null, email = null, username = null, role
         document.querySelector("#username").value = username;
         document.querySelector("#email").value = email;
         document.querySelector("#editRole").value = role;
-        document.querySelector("#firstName").value = first_name;
-        document.querySelector("#lastName").value = last_name;
-        document.querySelector("#age").value = age;
-        document.querySelector("#bio").value = bio;
+        document.querySelector("#firstName").value = first_name === "None" ? '' : first_name;
+        document.querySelector("#lastName").value = last_name === "None" ? '' : last_name;
+        document.querySelector("#age").value = age === "None" ? '' : age;
+        document.querySelector("#bio").value = bio === "None" ? '' : bio;
         document.querySelector("#featured").checked = featured === "True";
 
         form.action = `/admin/edit-user/${userId}`;

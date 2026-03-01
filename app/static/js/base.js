@@ -14,23 +14,23 @@ const toggleModal = (modalId, userId = null, email = null, username = null, role
     const modal = document.querySelector(`#${modalId}`);
 
     if (modalId === 'editModal') {
-        const form = document.getElementById("editForm");
+        const form = document.querySelector("#editForm");
 
-        document.getElementById("username").value = username;
-        document.getElementById("email").value = email;
-        document.getElementById("role").value = role;
-        document.getElementById("firstName").value = first_name;
-        document.getElementById("lastName").value = last_name;
-        document.getElementById("age").value = age;
-        document.getElementById("bio").value = bio;
-        document.getElementById("featured").checked = featured === "True";
+        document.querySelector("#username").value = username;
+        document.querySelector("#email").value = email;
+        document.querySelector("#editRole").value = role;
+        document.querySelector("#firstName").value = first_name;
+        document.querySelector("#lastName").value = last_name;
+        document.querySelector("#age").value = age;
+        document.querySelector("#bio").value = bio;
+        document.querySelector("#featured").checked = featured === "True";
 
         form.action = `/admin/edit-user/${userId}`;
     }
 
     if (modalId === 'deleteModal' && userId) {
-        const deleteForm = document.getElementById('deleteForm');
-        const deleteMessage = document.getElementById('deleteMessage');
+        const deleteForm = document.querySelector('#deleteForm');
+        const deleteMessage = document.querySelector('#deleteMessage');
         deleteMessage.innerHTML = `Are you sure you want to delete user with email <strong>${email}</strong>? This action cannot be undone.`;
         deleteForm.action = `/admin/delete-user/${userId}`;
     }

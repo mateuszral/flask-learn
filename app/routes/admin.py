@@ -1,25 +1,28 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
 
 from app.services.user_service import admin_edit_user, admin_create_user, delete_user, get_all_users, get_user_by_email, get_user_by_username
 from app.utils.utils import admin_required
 
-admin = Blueprint('admin', __name__)
+admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 @admin.get('/user-management')
+@login_required
 @admin_required
 def user_management():
     users = get_all_users()
     return render_template('user_management.html', users=users)
 
 @admin.get('/admin-panel')
+@login_required
 @admin_required
 def admin_panel():
     users = get_all_users()
     return render_template('admin_panel.html', users=users)
 
-@admin.post('/admin/add-user')
+@admin.post('/add-user')
+@login_required
 @admin_required
 def admin_add_user():
     username = request.form.get('username')
@@ -36,7 +39,8 @@ def admin_add_user():
     flash('User created successfully! Have to change password on first login', 'success')
     return redirect(url_for('admin.user_management'))
 
-@admin.post('/admin/edit-user/<user_id>')
+@admin.post('/edit-user/<user_id>')
+@login_required
 @admin_required
 def admin_edit_account(user_id):
     
@@ -67,7 +71,8 @@ def admin_edit_account(user_id):
 
     return redirect(url_for('admin.user_management'))
 
-@admin.post('/admin/delete-user/<user_id>')
+@admin.post('/delete-user/<user_id>')
+@login_required
 @admin_required
 def admin_delete_account(user_id):
     if user_id == current_user.id:

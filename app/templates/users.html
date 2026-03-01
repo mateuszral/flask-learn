@@ -48,11 +48,9 @@
                             </p>
                         </div>
 
-                        {% if current_user.is_authenticated %}
-                            <div class="user-actions">
-                                <a href="{{ url_for('profile.profile_view_user', user_id=user.id) }}" class="btn-secondary">View</a>
-                            </div>
-                        {% endif %}
+                        <div class="user-actions">
+                            <a href="{{ url_for('profile.profile_view_username', username=user.username) }}" class="btn-secondary">View</a>
+                        </div>
 
                     </div>
                 {% endfor %}

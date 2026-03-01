@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, current_user, logout_user
 
-from app.services.user_service import change_password, delete_user, edit_user, get_user_by_id
+from app.services.user_service import change_password, delete_user, edit_user, get_user_by_id, get_user_by_username
 
 
 profile = Blueprint('profile', __name__)
@@ -10,6 +10,15 @@ profile = Blueprint('profile', __name__)
 @login_required
 def profile_view():
     return render_template('profile.html', user=current_user)
+
+@profile.get('/profile/<string:username>')
+def profile_view_username(username):
+    user = get_user_by_username(username)
+    if user:
+        return render_template('profile.html', user=user)
+    else:
+        flash("User not found.", 'error')
+        return redirect(url_for('main.home'))
 
 @profile.get('/profile/<string:user_id>')
 @login_required

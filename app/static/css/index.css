@@ -53,6 +53,15 @@
     font-weight: 600;
 }
 
+.user-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-link:hover {
+    transform: scale(1.02);
+}
+
 .user-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));

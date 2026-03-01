@@ -17,16 +17,23 @@
         <div class="user-grid">
             {% for user in users %}
                 {% if user.featured %}
-                    <div class="user-card">
-                        <!-- to change after uploading avatars to server -->
-                        {% if user.avatar %}
-                            <img src="{{ url_for('static', filename=user.avatar.replace('static/', '')) }}" />
-                        {% else %}
-                            <img src="{{ url_for('static', filename='uploads/default.png') }}" />
-                        {% endif %}
-                        <h3>{{ user.user_info.first_name }} {{ user.user_info.last_name }} ({{ user.user_info.age }})</h3>
-                        <p>{{ user.user_info.bio }}</p>
-                    </div>
+                    <a href="{{ url_for('profile.profile_view_username', username=user.username) }}" class="user-link">
+                        <div class="user-card">
+                            {% if user.avatar %}
+                                <img src="{{ url_for('static', filename=user.avatar.replace('static/', '')) }}" />
+                            {% else %}
+                                <img src="{{ url_for('static', filename='uploads/default.png') }}" />
+                            {% endif %}
+
+                            <h3>
+                                {{ user.user_info.first_name }}
+                                {{ user.user_info.last_name }}
+                                ({{ user.user_info.age }})
+                            </h3>
+
+                            <p>{{ user.user_info.bio }}</p>
+                        </div>
+                    </a>
                 {% endif %}
             {% endfor %}
         </div>

@@ -17,9 +17,6 @@ def authenticate_user(email, password):
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated:
-            abort(401)
-
         if current_user.role != "admin":
             abort(403)
 

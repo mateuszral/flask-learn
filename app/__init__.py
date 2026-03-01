@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -10,6 +10,10 @@ migrate = Migrate()
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login_form'
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return render_template("errors/401.html"), 401
 
 def create_app():
     app = Flask(__name__)

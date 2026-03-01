@@ -19,6 +19,10 @@ def users_view():
 def contact_view():
     return render_template('contact.html')
 
-@main.errorhandler(404)
-def page_not_found():
-    return render_template('404.html'), 404
+@main.app_errorhandler(403)
+def forbidden_error(error):
+    return render_template('errors/403.html'), 403
+
+@main.app_errorhandler(404)
+def page_not_found(error):
+    return render_template('errors/404.html'), 404

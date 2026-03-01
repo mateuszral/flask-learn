@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import abort, flash, redirect, url_for
+from flask import abort
 from flask_login import current_user
 from werkzeug.security import check_password_hash
 

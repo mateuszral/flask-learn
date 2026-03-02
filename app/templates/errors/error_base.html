@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Error{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section class="error-wrapper">
+        <div class="error-card">
+            <div class="error-code">{% block code %}Error{% endblock %}</div>
+            <div class="error-title">{% block message %}Something went wrong.{% endblock %}</div>
+            <div class="error-description">
+                {% block description %}{% endblock %}
+            </div>
+
+            <div class="error-actions">
+                <a href="{{ url_for('main.home') }}" class="btn-primary">Go Home</a>
+                <a href="javascript:history.back()" class="btn-secondary">Go Back</a>
+                {% block actions %}{% endblock %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

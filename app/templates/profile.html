@@ -55,6 +55,11 @@
                     <p>{{ user.user_info.bio }}</p>
                 </div>
 
+                <div class="info-column">
+                    <span class="info-label">Joined:</span>
+                    <span>{{ user.joined_at.strftime('%d %B, %Y') }}</span>
+                </div>
+
             </div>
 
             <div class="profile-actions">

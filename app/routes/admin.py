@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
 
-from app.services.user_service import admin_edit_user, admin_create_user, delete_user, get_all_users, get_user_by_email, get_user_by_username
+from app.services.user_service import admin_edit_user, admin_create_user, delete_user, get_all_users, get_user_by_email, get_user_by_username, get_users_by_page, search_users
 from app.utils.utils import admin_required
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -11,7 +11,12 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @login_required
 @admin_required
 def user_management():
-    users = get_all_users()
+    page = request.args.get('page', 1, type=int)
+    query = request.args.get('q', '')
+    
+    users_query = search_users(query)
+    users = get_users_by_page(page, users_query, per_page=5)
+    
     return render_template('user_management.html', users=users)
 
 @admin.get('/admin-panel')

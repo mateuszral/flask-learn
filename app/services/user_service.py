@@ -11,8 +11,8 @@ from app.models import User, UserInfo
 def get_all_users():
     return User.query.all()
 
-def get_users_by_page(page, per_page=2):
-    return User.query.paginate(page=page, per_page=per_page, error_out=False)
+def get_users_by_page(page, query, per_page=2):
+    return query.paginate(page=page, per_page=per_page, error_out=False)
 
 def get_featured_users():
     return User.query.filter_by(featured = True)
@@ -139,6 +139,23 @@ def delete_user(user_id):
     db.session.commit()
     
     return user, "User deleted successfully!"
+
+def search_users(search_term):
+    query = User.query.join(UserInfo)
+    
+    if not search_term:
+        return User.query
+    
+    search_term = f"%{search_term}%"
+    
+    return query.filter(
+            db.or_(
+            User.username.ilike(search_term),
+            User.email.ilike(search_term),
+            UserInfo.first_name.ilike(search_term),
+            UserInfo.last_name.ilike(search_term)
+        )
+    )
 
 def admin_create_user(username, email, password, role):
     if get_user_by_username(username) or get_user_by_email(email):

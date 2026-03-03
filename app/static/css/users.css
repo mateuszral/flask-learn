@@ -28,6 +28,50 @@
     font-size: 0.9rem;
 }
 
+.users-search {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.users-search form {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.users-search input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.6);
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.users-search input:focus {
+    border-color: #38bdf8;
+}
+
+.users-search button {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.users-search button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
 .users-list {
     display: flex;
     flex-direction: column;

@@ -7,7 +7,7 @@
 - edit acc - featured (admin) - shows featured when not, userinfo and avatar ✅
 - featured users - avatar source ✅
 - refactor structure!! ✅
-- search bar
+- search bar ✅
 - follow system
 - profile views/follows counter
 - in dashboard - total followers, acc info, join date

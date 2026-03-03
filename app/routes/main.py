@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
-from app.services.user_service import get_users_by_page, get_featured_users
+from app.services.user_service import get_users_by_page, get_featured_users, search_users
 
 
 main = Blueprint('main', __name__)
@@ -11,9 +11,12 @@ def home():
     return render_template('index.html', users=featured_users)
 
 @main.get('/users')
-@main.get('/users/<int:page>')
-def users_view(page=1):
-    users = get_users_by_page(page)
+def users_view():
+    page = request.args.get('page', 1, type=int)
+    query = request.args.get('q', '')
+    
+    users_query = search_users(query)
+    users = get_users_by_page(page, users_query)
     return render_template('users.html', users=users)
 
 @main.get('/contact')
